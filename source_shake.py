@@ -10,11 +10,54 @@ def script_description():
            then Hotkeys to select the key combination. Check the 
            Source Shake Scripting Tutorial on the OBS Wiki for more information."""
 
+# Global variables holding the values of data settings / properties
+source_name = ""    # Name of the source to shake
+frequency   = 0     # Frequency of oscillations in Hertz
+amplitude   = 0     # Angular amplitude of oscillations in degrees
+
+# User Data Setting:
+
+def populate_list_property_with_source_names(list_property):
+    sources = obs.obs_enum_sources()
+    obs.obs_property_list_clear(list_property)
+    obs.obs_property_list_add_string(list_property, "", "")
+    for source in sources:
+        name = obs.obs_source_get_name(source)
+        obs.obs_property_list_add_string(list_property, name, name)
+    obs.source_list_release(sources)
+
+def script_defaults(settings):
+    obs.obs_data_set_default_string(settings, "source_name", "")
+    obs.obs_data_set_default_double(settings, "frequency", 2)
+    obs.obs_data_set_default_int(settings, "amplitude", 10)
+
+# Called to display the properties GUI
+def script_properties():
+    props = obs.obs_properties_create()
+
+    list_property = obs.obs_properties_add_list(props, "source_name", "Source name", obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_STRING)
+    populate_list_property_with_source_names(list_property)
+    # Button to refresh the drop-down list
+    obs.obs_properties_add_button(props, "button", "Refresh list of sources", lambda props, prop: True if populate_list_property_with_source_names(list_property) else True)
+
+    obs.obs_properties_add_float_slider(props, "frequency", "Shake frequency", 0.1, 20, 0.1)
+    obs.obs_properties_add_int_slider(props, "amplitude", "Shake amplitude", 0, 90, 1)
+
+    return props
+
+# Called after change of settings including once after script load
+def script_update(settings):
+    global source_name, frequency, amplitude
+    restore_sceneitem_after_shake()
+    source_name = obs.obs_data_get_string(settings, "source_name")
+    frequency = obs.obs_data_get_double(settings, "frequency")
+    amplitude = obs.obs_data_get_int(settings, "amplitude")
+
+
 
 # Global variables to restore the scene item after shake
 shaken_sceneitem = None     # Reference to the modified scene item
 shaken_sceneitem_angle = 0  # Initial rotation angle, used as well for oscillations
-
 
 # Callback for item_remove signal
 def on_shaken_sceneitem_removed(calldata):
@@ -55,12 +98,6 @@ def get_sceneitem_from_source_name_in_current_scene(name):
     return result_sceneitem
 
 
-# Global variables holding the values of data settings / properties
-source_name = "Rules"  # Name of the source to shake
-frequency = 2              # Frequency of oscillations in Hertz
-amplitude = 10             # Angular amplitude of oscillations in degrees
-
-
 # Animates the scene item corresponding to source_name in the current scene
 def shake_source():
     sceneitem = get_sceneitem_from_source_name_in_current_scene(source_name)
@@ -75,10 +112,31 @@ def shake_source():
     else:
         restore_sceneitem_after_shake()
 
+# Identifier of the hotkey set by OBS
+hotkey_id = obs.OBS_INVALID_HOTKEY_ID
+
+# Called at script load
+def script_load(settings):
+    global hotkey_id
+    hotkey_id = obs.obs_hotkey_register_frontend(script_path(), "Source Shake", on_shake_hotkey)
+    hotkey_save_array = obs.obs_data_get_array(settings, "shake_hotkey")
+    obs.obs_hotkey_load(hotkey_id, hotkey_save_array)
+    obs.obs_data_array_release(hotkey_save_array)
+
+# Global animation activity flag
+is_active = False
+
+# Callback for the hotkey
+def on_shake_hotkey(pressed):
+    global is_active
+    is_active = pressed
 
 # Called every frame
 def script_tick(seconds):
-    shake_source()
+    if is_active:
+        shake_source()
+    else:
+        restore_sceneitem_after_shake()
 
 
 # Called at script unload
@@ -90,4 +148,9 @@ def script_unload():
 def script_save(settings):
     restore_sceneitem_after_shake()
     obs.obs_save_sources()
+
+    # Hotkey save
+    hotkey_save_array = obs.obs_hotkey_save(hotkey_id)
+    obs.obs_data_set_array(settings, "shake_hotkey", hotkey_save_array)
+    obs.obs_data_array_release(hotkey_save_array)
 
