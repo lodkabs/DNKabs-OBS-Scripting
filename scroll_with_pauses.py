@@ -15,9 +15,8 @@ def populate_list_property_with_source_names(list_property):
     obs.obs_property_list_clear(list_property)
     obs.obs_property_list_add_string(list_property, "", "")
     for source in sources:
-        if obs.obs_source_get_icon(source) == obs.OBS_ICON_TYPE_TEXT:
-            name = obs.obs_source_get_name(source)
-            obs.obs_property_list_add_string(list_property, name, name)
+        name = obs.obs_source_get_name(source)
+        obs.obs_property_list_add_string(list_property, name, name)
     obs.source_list_release(sources)
 
 def script_defaults(settings):
