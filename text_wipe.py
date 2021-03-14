@@ -27,18 +27,22 @@ new_line_list = []
 def get_text_of_source(source):
     ret_value = ""
     source_data = obs.obs_source_get_settings(source)
-    json_obj = json.loads(obs.obs_data_get_json(source_data))
-    if "text" in json_obj:
-        ret_value = json_obj["text"]
+    data_json = obs.obs_data_get_json(source_data)
+    if data_json:
+        json_obj = json.loads(data_json)
+        if "text" in json_obj:
+            ret_value = json_obj["text"]
     obs.obs_data_release(source_data)
 
     return ret_value
 
 def get_text_from_data(source_data):
     ret_value = ""
-    json_obj = json.loads(obs.obs_data_get_json(source_data))
-    if "text" in json_obj:
-        ret_value = json_obj["text"]
+    data_json = obs.obs_data_get_json(source_data)
+    if data_json: 
+        json_obj = json.loads(data_json)
+        if "text" in json_obj:
+            ret_value = json_obj["text"]
 
     return ret_value
 
@@ -139,6 +143,8 @@ def get_source_from_source_name(name):
         if name == obs.obs_source_get_name(source):
             result_sourceitem = source
             break
+
+    obs.source_list_release(sources)
 
     return result_sourceitem
 
