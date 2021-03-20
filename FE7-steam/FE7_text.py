@@ -3,9 +3,8 @@ import os
 import inspect
 import json
 
-
 # Global variables for locale objects
-source_name    = "FE_GBA_rules"
+source_name    = ""
 filter_name    = "Scroll"
 location       = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 text_file_name = "rule_set.txt"
@@ -18,19 +17,67 @@ rules_filter_source = None
 rules_filter_data   = None
 rules_list          = ""
 
+# Global variables for arrow gif source
+arrow_name   = "Arrow"
+arrow_source = None
+
 # Global variables for scroll effect
 next_line     = 0
 next_char     = 0
 time_per_char = 15
-display_time  = 5000
+display_time  = 7000
 
 
 def script_description():
     return f"""Fire Emblem GBA-style text scroll
-               Create a text source called \"{source_name}\",
-               with a scroll filter called \"{filter_name}\".
+               Create a text source with a scroll filter called \"{filter_name}\".
                Add rule set to local file called \"{text_file_name}\",
                in the same location as this script"""
+
+def get_text_of_source(source):
+    ret_value = ""
+    source_data = obs.obs_source_get_settings(source)
+    data_json = obs.obs_data_get_json(source_data)
+    if data_json:
+        json_obj = json.loads(data_json)
+        if "text" in json_obj:
+            ret_value = json_obj["text"]
+    obs.obs_data_release(source_data)
+
+    return ret_value
+
+def populate_list_property_with_source_names(list_property):
+    obs.obs_property_list_clear(list_property)
+    obs.obs_property_list_add_string(list_property, "", "")
+
+    sources = obs.obs_enum_sources()
+    for source in sources:
+        # Restrict selectable source list to Text objects
+        if get_text_of_source(source):
+            name = obs.obs_source_get_name(source)
+            obs.obs_property_list_add_string(list_property, name, name)
+    obs.source_list_release(sources)
+
+def script_defaults(settings):
+    obs.obs_data_set_default_string(settings, "source_name", "")
+
+# Called to display the properties GUI
+def script_properties():
+    props = obs.obs_properties_create()
+
+    list_property = obs.obs_properties_add_list(props, "source_name", "Source name", obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_STRING)
+    populate_list_property_with_source_names(list_property)
+
+    return props
+
+def script_update(settings):
+    global source_name
+
+    source_name = obs.obs_data_get_string(settings, "source_name")
+    reset_rules_variables()
+
+def script_load(settings):
+    reset_rules_variables()
 
 
 def remove_rules():
@@ -42,11 +89,10 @@ def remove_rules():
 
     # Reset text
     if rules_data:
-        set_rules_text("Whoops, something's gone wrong! Well, this is awkward ^_^'")
+        set_rules_text("Whoops, something's gone wrong! Well, this is awkward...")
         set_scroll_speed(0)
         obs.obs_data_release(rules_data)
         obs.obs_data_release(rules_filter_data)
-
 
 
 def reset_rules_variables():
@@ -63,12 +109,15 @@ def reset_rules_variables():
         rules_list = f.read().splitlines()
 
     # Get source
-    sources = obs.obs_enum_sources()
-    for source in sources:
-        if source_name == obs.obs_source_get_name(source):
-            rules_source = source
-            break
-    obs.source_list_release(sources)
+    if ok and source_name:
+        sources = obs.obs_enum_sources()
+        for source in sources:
+            if source_name == obs.obs_source_get_name(source):
+                rules_source = source
+                break
+        obs.source_list_release(sources)
+    else:
+        ok = False
 
     if ok and rules_source:
         # Get source data
@@ -92,11 +141,6 @@ def reset_rules_variables():
         print(f"Couldn't find filter {filter_name}")
         ok = False
 
-    # Testing - check data
-    json_t = json.loads(obs.obs_data_get_json(rules_data))
-    json_s = json.loads(obs.obs_data_get_json(rules_filter_data))
-    print(f"{json_t}\n{json_s}")
-
     # Set timer for scrolling effect
     if ok:
         line_lens = sorted(set([len(x) for x in rules_list]))
@@ -115,16 +159,6 @@ def set_scroll_speed(speed):
     global rules_filter_source, rules_filter_data
     obs.obs_data_set_int(rules_filter_data, "speed_y", speed)
     obs.obs_source_update(rules_filter_source, rules_filter_data)
-
-
-def script_update(setting):
-    reset_rules_variables()
-
-def script_load(setting):
-    reset_rules_variables()
-
-def script_unload():
-    remove_rules()
 
 
 # First, scroll text upwards off screen
