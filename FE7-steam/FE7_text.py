@@ -4,26 +4,26 @@ import inspect
 import json
 
 # Global variables for locale objects
-source_name    = ""
-filter_name    = "Scroll"
-location       = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-text_file_name = "rule_set.txt"
-text_file      = f"{location}/{text_file_name}"
+source_name     = ""
+filter_name     = "Scroll"
+location        = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+text_file_name  = "rule_set.txt"
+text_file       = f"{location}/{text_file_name}"
+arrow_file_name = "arrow_pos.txt"
+arrow_file      = f"{location}/{arrow_file_name}"
 
 # Global variables for rules source
 rules_source        = None
 rules_data          = None
 rules_filter_source = None
 rules_filter_data   = None
-rules_list          = ""
-rules_scene         = None
-rules_h             = 0
-rules_v             = 0
+rules_list          = []
 
 # Global variables for arrow gif source
-arrow_name          = "Arrow_Gif"
-arrow_source        = None
-arrow_scene         = None
+arrow_name     = "Arrow_Gif"
+arrow_source   = None
+arrow_scene    = None
+arrow_pos_list = []
 
 # Global variables for scroll effect
 next_line     = 0
@@ -93,7 +93,7 @@ def script_load(settings):
 def remove_rules():
     global rules_source, rules_filter_source, arrow_source
     global rules_data, rules_filter_data
-    global rules_scene, arrow_scene
+    global arrow_scene
 
     obs.timer_remove(rules_scrolling)
     obs.timer_remove(rules_line_type)
@@ -107,10 +107,6 @@ def remove_rules():
         obs.obs_data_release(rules_filter_data)
         rules_data = None
         rules_filter_data = None
-
-    if rules_scene:
-        obs.obs_sceneitem_release(rules_scene)
-        rules_scene = None
 
     if arrow_scene:
         obs.obs_sceneitem_release(arrow_scene)
@@ -126,11 +122,10 @@ def remove_rules():
 
 
 def reset_rules_variables():
-    global source_name, filter_name, text_file
+    global source_name, filter_name, text_file, arrow_file
     global rules_source, rules_data, rules_list
     global rules_filter_source, rules_filter_data
-    global rules_scene, rules_h, rules_v
-    global arrow_name, arrow_source, arrow_scene
+    global arrow_name, arrow_source, arrow_scene, arrow_pos_list
     global next_line, next_char, time_per_char, display_time
 
     ok = True
@@ -138,6 +133,10 @@ def reset_rules_variables():
     # Get rule set from local file
     with open(text_file) as f:
         rules_list = f.read().splitlines()
+
+    # Get arrow positions from local file
+    with open(arrow_file) as a:
+        arrow_pos_list = a.read().splitlines()
 
     # Get sources
     if ok and source_name:
@@ -161,17 +160,6 @@ def reset_rules_variables():
 
         # Get filter source
         rules_filter_source = obs.obs_source_get_filter_by_name(rules_source, filter_name)
-
-        # Get source scene
-        rules_scene = get_sceneitem_from_source_name_in_current_scene(source_name)
-
-        pos = obs.vec2()
-        pos.x = 0
-        pos.y = 0
-        
-        obs.obs_sceneitem_get_pos(rules_scene, pos)
-        rules_h = pos.x
-        rules_v = pos.y
     else:
         print(f"Couldn't find source {source_name}")
         ok = False
@@ -182,7 +170,7 @@ def reset_rules_variables():
 
         # Other settings
         set_rules_text(rules_list[0])
-        next_line = 1
+        next_line = 0
         next_char = 1
     else:
         print(f"Couldn't find filter {filter_name}")
@@ -197,6 +185,7 @@ def reset_rules_variables():
     # Set timer for scrolling effect
     if ok:
         arrow_next_to_text()
+        next_line = 1
         line_lens = sorted(set([len(x) for x in rules_list]))
         max_len = line_lens[-1]
         full_time = ((max_len * 2) * time_per_char) + display_time
@@ -215,17 +204,17 @@ def set_scroll_speed(speed):
     obs.obs_source_update(rules_filter_source, rules_filter_data)
 
 def arrow_next_to_text():
-    global arrow_scene
-    global rules_data, rules_scene, rules_h, rules_v
-    global char_length
+    global arrow_scene, next_line, arrow_pos_list
 
-    rule_text = obs.obs_data_get_string(rules_data, "text")
-    print(rules_h)
+    pos = obs.vec2()
+    pos.x = 0
+    pos.y = 0
+
+    obs.obs_sceneitem_get_pos(arrow_scene, pos)
 
     a_pos = obs.vec2()
-    a_pos.x = rules_h + ((len(rule_text) - 2) * char_length)
-    a_pos.y = rules_v
-    print(a_pos.x)
+    a_pos.x = float(arrow_pos_list[next_line])
+    a_pos.y = pos.y
 
     obs.obs_sceneitem_set_pos(arrow_scene, a_pos)
     obs.obs_sceneitem_set_visible(arrow_scene, True)
