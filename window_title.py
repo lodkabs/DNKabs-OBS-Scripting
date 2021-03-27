@@ -1,4 +1,5 @@
 import obspython as obs
+import re
 import json
 import ctypes
 
@@ -14,6 +15,15 @@ selected_window = None
 title_name      = ""
 title_source    = None
 titles          = []
+prefix_number   = True
+
+def script_description():
+    return """Show the title of a window
+           Select a text source and a Windows...window, the title of the window
+           will appear in the selected text source.
+           Some windows will have bracketed numbers in the title, e.g. (1),
+           there's an option to remove that.
+           """
 
 def foreach_window(hwnd, lParam):
     global titles
@@ -71,6 +81,8 @@ def populate_list_property_with_window_titles(title_list):
 
 def script_defaults(settings):
     obs.obs_data_set_default_string(settings, "source_name", "")
+    obs.obs_data_set_default_string(settings, "title_name", "")
+    obs.obs_data_set_default_bool(settings, "source_name", True)
 
 def script_properties():
     props = obs.obs_properties_create()
@@ -84,29 +96,37 @@ def script_properties():
     # Button to refresh the drop-down lists
     obs.obs_properties_add_button(props, "button", "Refresh lists", lambda props, prop: True if populate_list_property_with_source_names(list_property) and populate_list_property_with_window_titles(title_list) else True)
 
+    obs.obs_properties_add_bool(props, "prefix_number", "Remove bracketed number at start?")
+
     return props
 
 
 
 def script_update(settings):
-    global source_name, title_source, titles, title_name, selected_window
+    global source_name, title_source, titles, title_name, prefix_number, selected_window
 
     obs.timer_remove(set_title_text)
     source_name = obs.obs_data_get_string(settings, "source_name")
     title_name = obs.obs_data_get_string(settings, "title_name")
+    prefix_number = obs.obs_data_get_bool(settings, "prefix_number")
 
     if source_name and title_name:
         title_source = get_source_from_source_name(source_name)
+
+        if prefix_number:
+            title_name = re.sub('^\(\d+\)\s+', '', title_name)
+
         set_text_of_source(title_source, title_name)
 
         for t in titles:
             if t[1] == title_name:
                 selected_window = t[0]
+
         obs.timer_add(set_title_text, 100)
 
 
 def set_title_text():
-    global title_source, title_name, selected_window
+    global title_source, title_name, prefix_number, selected_window
 
     length = GetWindowTextLength(selected_window)
     buff = ctypes.create_unicode_buffer(length + 1)
@@ -114,7 +134,11 @@ def set_title_text():
 
     new_title = buff.value
 
+    if prefix_number:
+        new_title = re.sub('^\(\d+\)\s+', '', new_title)
+
     if title_name != new_title:
         title_name = new_title
         set_text_of_source(title_source, title_name)
+
 
