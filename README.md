@@ -37,4 +37,9 @@ The speed of the wipe and the length of the pause between each line can be contr
 ### scroll_with_pauses.py
 *Currently in progress*<br />
 OBS supports text scrolling, but doesn't support periodic pauses between lines.<br />
-This would give the viewer some time to read each line before moving on to the next.<br />
+This would give the viewer some time to read each line before moving on to the next.
+
+---
+## KabsBot
+I followed [this tutorial](https://dev.to/ninjabunny9000/let-s-make-a-twitch-bot-with-python-2nd8) to create a bot for the channel (with some help from [this video](https://www.youtube.com/watch?v=gYT51WoGBJc).<br />
+Not quite sure what it'll do yet...I'll keep you posted.
