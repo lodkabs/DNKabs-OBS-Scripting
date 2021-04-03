@@ -41,5 +41,5 @@ This would give the viewer some time to read each line before moving on to the n
 
 ---
 ## KabsBot
-I followed [this tutorial](https://dev.to/ninjabunny9000/let-s-make-a-twitch-bot-with-python-2nd8) to create a bot for the channel (with some help from [this video](https://www.youtube.com/watch?v=gYT51WoGBJc).<br />
+I followed [this tutorial](https://dev.to/ninjabunny9000/let-s-make-a-twitch-bot-with-python-2nd8) to create a bot for the channel (with some help from [this video](https://www.youtube.com/watch?v=gYT51WoGBJc)).<br />
 Not quite sure what it'll do yet...I'll keep you posted.
