@@ -5,6 +5,8 @@ import os
 from random import randrange
 from twitchio.ext import commands
 
+import responses
+
 bot_name = os.environ['BOT_NICK']
 streamer_name = os.environ['CHANNEL']
 
@@ -17,16 +19,9 @@ bot = commands.Bot(
     initial_channels=[streamer_name]
 )
 
-greetings = {"hello", "hi", "hey", "heya", "heplo", "greetings", "morning", "afternoon", "evening", "yo", "koncha", "heyguys"}
-greet_responses = [
-        "Hi {NAME}, glad you could make it :)",
-        "Woah, {NAME}, great to see you here :O",
-        "Hey Kabs, {NAME} is here, isn't that awesome? :D",
-        "Eeey, it's {NAME}, nice B)",
-        "{NAME}! I was hoping you'd make it <3"
-        ]
 greeted_users = []
 noticed_users = []
+lurk_users = []
 
 @bot.event
 async def event_ready():
@@ -43,11 +38,12 @@ async def event_message(ctx):
 
     # make sure the bot ignores itself
     if ctx.author.name.lower() == bot_name.lower():
+        print(f"Returned message:\n\t{ctx.content}")
         return
 
-    print(f"Received from {ctx.author.name}: {ctx.content}")
+    print(f"Received from {ctx.author.name}:\n\t{ctx.content}")
 
-#    await bot.handle_commands(ctx)
+    await bot.handle_commands(ctx)
 
     content_string = ctx.content.lower()
     content_set = set(content_string.split())
@@ -56,20 +52,44 @@ async def event_message(ctx):
         await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
         noticed_users.append(ctx.author.name)
         greeted_users.append(ctx.author.name)
-    elif greetings.intersection(content_set) and ctx.author.name not in greeted_users:
+    elif ctx.author.name not in greeted_users:
         await ctx.channel.send(send_greeting(ctx.author.name))
         greeted_users.append(ctx.author.name)
 
 
-# @bot.command(name="test")
-# async def test(ctx):
-#     await ctx.send("test passed!")
+@bot.command(name="lurk")
+async def lurk(ctx):
+    global lurk_users
+
+    if ctx.author.name in lurk_users:
+        randnum = randrange(len(responses.re_lurk_responses))
+        lurk_response = responses.re_lurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+    else:
+        randnum = randrange(len(responses.lurk_responses))
+        lurk_response = responses.lurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        lurk_users.append(ctx.author.name)
+
+    await ctx.send(lurk_response)
+
+@bot.command(name="unlurk")
+async def unlurk(ctx):
+    global lurk_users
+
+    if ctx.author.name in lurk_users:
+        randnum = randrange(len(responses.unlurk_responses))
+        unlurk_response = responses.unlurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        lurk_users.remove(ctx.author.name)
+    else:
+        randnum = randrange(len(responses.re_unlurk_responses))
+        unlurk_response = responses.re_unlurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+
+    await ctx.send(unlurk_response)
+
 
 def send_greeting(name):
-    global greet_responses
-    randnum = randrange(len(greet_responses))
+    randnum = randrange(len(responses.greet_responses))
 
-    greet_response = greet_responses[randnum].replace("{NAME}", f"@{name}")
+    greet_response = responses.greet_responses[randnum].replace("{NAME}", f"@{name}")
 
     return greet_response
 
