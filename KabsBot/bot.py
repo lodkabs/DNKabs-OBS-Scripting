@@ -4,6 +4,9 @@
 import os
 from random import randrange
 from twitchio.ext import commands
+import psycopg2
+import signal
+import datetime
 
 import responses
 
@@ -18,6 +21,33 @@ bot = commands.Bot(
     prefix=os.environ['BOT_PREFIX'],
     initial_channels=[streamer_name]
 )
+
+# Database handling
+try:
+    db = psycopg2.connect(
+            database=os.environ['KABSBOT_DB_NAME'],
+            user=os.environ['KABSBOT_DB_USER'],
+            password=os.environ['KABSBOT_DB_PASSWORD'],
+            host=os.environ['KABSBOT_DB_HOST'],
+            port=os.environ['KABSBOT_DB_PORT']
+    )
+except:
+    print("Could not connect to database!")
+    db = None
+else:
+    print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
+finally:
+    pass
+
+def keyboardInterruptHandler(signal, frame):
+    print(f"\nKeyboardInterrupt (ID: {signal}) has been caught.\n")
+    if db:
+        db.close()
+        print(f"Disconnected from {os.environ['KABSBOT_DB_NAME']} database.\n")
+    exit(0)
+
+signal.signal(signal.SIGINT, keyboardInterruptHandler)
+
 
 greeted_users = []
 noticed_users = []
@@ -38,10 +68,10 @@ async def event_message(ctx):
 
     # make sure the bot ignores itself
     if ctx.author.name.lower() == bot_name.lower():
-        print(f"Returned message:\n\t{ctx.content}")
+        print(f"{datetime.datetime.now()} Returned message:\n\t{ctx.content}")
         return
 
-    print(f"Received from {ctx.author.name}:\n\t{ctx.content}")
+    print(f"{datetime.datetime.now()} Received from {ctx.author.name}:\n\t{ctx.content}")
 
     await bot.handle_commands(ctx)
 
@@ -52,6 +82,12 @@ async def event_message(ctx):
         await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
         noticed_users.append(ctx.author.name)
         greeted_users.append(ctx.author.name)
+
+        sql = f"INSERT INTO reactions (timestamp, reaction, speech, shown) VALUES ('{datetime.datetime.now()}', 'lurk', 'Hi\n{ctx.author.name}', False);"
+
+        cur = db.cursor()
+        cur.execute(sql)
+        db.commit()
     elif ctx.author.name not in greeted_users:
         await ctx.channel.send(send_greeting(ctx.author.name))
         greeted_users.append(ctx.author.name)
