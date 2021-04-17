@@ -48,6 +48,15 @@ def keyboardInterruptHandler(signal, frame):
 
 signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
+def send_to_db(reaction, speech):
+    global db
+    sql = f"""INSERT INTO reactions (timestamp, reaction, speech, shown)
+              VALUES ('{datetime.datetime.now()}', '{reaction}', '{speech}', False);"""
+
+    cur = db.cursor()
+    cur.execute(sql)
+    db.commit()
+
 
 greeted_users = []
 noticed_users = []
@@ -80,14 +89,12 @@ async def event_message(ctx):
 
     if (bot_name.lower() in content_string or "kabsbot" in content_string) and ctx.author.name not in noticed_users:
         await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
+
         noticed_users.append(ctx.author.name)
         greeted_users.append(ctx.author.name)
 
-        sql = f"INSERT INTO reactions (timestamp, reaction, speech, shown) VALUES ('{datetime.datetime.now()}', 'lurk', 'Hi\n{ctx.author.name}', False);"
+        send_to_db("notice", f"Hi\n{ctx.author.name}")
 
-        cur = db.cursor()
-        cur.execute(sql)
-        db.commit()
     elif ctx.author.name not in greeted_users:
         await ctx.channel.send(send_greeting(ctx.author.name))
         greeted_users.append(ctx.author.name)
@@ -100,12 +107,17 @@ async def lurk(ctx):
     if ctx.author.name in lurk_users:
         randnum = randrange(len(responses.re_lurk_responses))
         lurk_response = responses.re_lurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        reaction = "relurk"
+        speech = f"I still see you\n{ctx.author.name}~"
     else:
         randnum = randrange(len(responses.lurk_responses))
         lurk_response = responses.lurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
         lurk_users.append(ctx.author.name)
+        reaction = "lurk"
+        speech = f"Thanks for lurking\n{ctx.author.name}!"
 
     await ctx.send(lurk_response)
+    send_to_db(reaction, speech)
 
 @bot.command(name="unlurk")
 async def unlurk(ctx):
@@ -115,11 +127,16 @@ async def unlurk(ctx):
         randnum = randrange(len(responses.unlurk_responses))
         unlurk_response = responses.unlurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
         lurk_users.remove(ctx.author.name)
+        reaction = "unlurk"
+        speech = f"Welcome back\n{ctx.author.name}"
     else:
         randnum = randrange(len(responses.re_unlurk_responses))
         unlurk_response = responses.re_unlurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        reaction = "reunlurk"
+        speech = f"Don't scare me\n{ctx.author.name}!"
 
     await ctx.send(unlurk_response)
+    send_to_db(reaction, speech)
 
 
 def send_greeting(name):
