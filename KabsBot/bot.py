@@ -62,6 +62,8 @@ greeted_users = []
 noticed_users = []
 lurk_users = []
 
+is_command = False
+
 @bot.event
 async def event_ready():
     'Called once when the bot goes online.'
@@ -74,6 +76,7 @@ async def event_message(ctx):
     'Runs every time a message is sent in chat.'
 
     global bot_name, streamer_name, greetings, greeted_users
+    global is_command
 
     # make sure the bot ignores itself
     if ctx.author.name.lower() == bot_name.lower():
@@ -84,25 +87,34 @@ async def event_message(ctx):
 
     await bot.handle_commands(ctx)
 
-    content_string = ctx.content.lower()
-    content_set = set(content_string.split())
+    if not is_command:
+        content_string = ctx.content.lower()
+        content_set = set(content_string.split())
 
-    if (bot_name.lower() in content_string or "kabsbot" in content_string) and ctx.author.name not in noticed_users:
-        await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
+        if (bot_name.lower() in content_string or "kabsbot" in content_string) and ctx.author.name not in noticed_users:
+            await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
 
-        noticed_users.append(ctx.author.name)
-        greeted_users.append(ctx.author.name)
+            noticed_users.append(ctx.author.name)
+            greeted_users.append(ctx.author.name)
 
-        send_to_db("notice", f"Hi\n{ctx.author.name}")
+            send_to_db("notice", f"Hi\n{ctx.author.name}")
 
-    elif ctx.author.name not in greeted_users:
-        await ctx.channel.send(send_greeting(ctx.author.name))
-        greeted_users.append(ctx.author.name)
+        elif ctx.author.name not in greeted_users:
+            await ctx.channel.send(send_greeting(ctx.author.name))
+            greeted_users.append(ctx.author.name)
+    else:
+        if ctx.author.name not in greeted_users:
+            greeted_users.append(ctx.author.name)
+
+        is_command = False
 
 
 @bot.command(name="lurk")
 async def lurk(ctx):
     global lurk_users
+    global is_command
+
+    is_command = True
 
     if ctx.author.name in lurk_users:
         randnum = randrange(len(responses.re_lurk_responses))
@@ -122,6 +134,9 @@ async def lurk(ctx):
 @bot.command(name="unlurk")
 async def unlurk(ctx):
     global lurk_users
+    global is_command
+
+    is_command = True
 
     if ctx.author.name in lurk_users:
         randnum = randrange(len(responses.unlurk_responses))
