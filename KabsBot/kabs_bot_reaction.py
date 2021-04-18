@@ -32,6 +32,8 @@ box_scene = None
 image_path = location + "/images/kabs_bot"
 
 db = None
+records = []
+next_line = 0
 
 
 def populate_variables():
@@ -90,16 +92,15 @@ def populate_variables():
 
     speech_data = obs.obs_source_get_settings(speech_source)
 
-    box_scene = get_sceneitem_from_source_name_in_current_scene(arrow_name)
+    box_scene = get_sceneitem_from_source_name_in_current_scene(box_name)
     obs.obs_sceneitem_set_visible(box_scene, False)
 
     obs.timer_add(bot_speak, 2000)
 
 
 def bot_speak():
-    global image_name, image_source, image_data
     global speech_name, speech_source, speech_data
-    global db
+    global db, records
 
     sql = "SELECT * FROM reactions WHERE shown=false ORDER BY timestamp"
     cur = db.cursor()
@@ -110,16 +111,34 @@ def bot_speak():
         print("Unable to obtain records")
     else:
         if records:
-            for record in records:
-                bot_image_set(record[2])
-
-        obs.remove_current_callback()
-        print("Should stop here")
+            obs.remove_current_callback()
+            obs.timer_add(bot_reaction, 5000)
     finally:
         pass
 
 
-def bot_reactions
+def bot_reaction():
+    global box_scene, records, next_line
+    global db
+
+    if next_line < len(records):
+        bot_image_set(records[next_line][2])
+        obs.obs_sceneitem_set_visible(box_scene, True)
+        set_speech_text(records[next_line][3])
+
+        sql = f"UPDATE reactions set shown = True where id = {records[next_line][0]}"
+        cur = db.cursor()
+        cur.execute(sql)
+        db.commit()
+
+        next_line += 1
+    else:
+        obs.remove_current_callback()
+        set_speech_text("")
+        obs.obs_sceneitem_set_visible(box_scene, False)
+        bot_image_set("neutral")
+        next_line = 0
+        obs.timer_add(bot_speak, 2000)
 
 
 def bot_image_set(state):
@@ -129,6 +148,23 @@ def bot_image_set(state):
     obs.obs_source_update(image_source, image_data)
 
 
+def set_speech_text(text):
+    global speech_source, speech_data
+    obs.obs_data_set_string(speech_data, "text", f"{text}")
+    obs.obs_source_update(speech_source, speech_data)
+
+
+# Retrieves the scene item of the given source name in the current scene or None if not found
+def get_sceneitem_from_source_name_in_current_scene(name):
+    result_sceneitem = None
+    current_scene_as_source = obs.obs_frontend_get_current_scene()
+    if current_scene_as_source:
+        current_scene = obs.obs_scene_from_source(current_scene_as_source)
+        result_sceneitem = obs.obs_scene_find_source_recursive(current_scene, name)
+        obs.obs_source_release(current_scene_as_source)
+    return result_sceneitem
+
+
 def script_load(settings):
     populate_variables()
 
@@ -136,7 +172,7 @@ def script_update(settings):
     populate_variables()
 
 def script_unload(settings):
-    global image_data, speech_data, db
+    global image_data, speech_data, box_scene, db
 
     if db:
         db.close()

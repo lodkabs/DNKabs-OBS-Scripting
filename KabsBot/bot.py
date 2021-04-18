@@ -133,7 +133,7 @@ async def unlurk(ctx):
         randnum = randrange(len(responses.re_unlurk_responses))
         unlurk_response = responses.re_unlurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
         reaction = "reunlurk"
-        speech = f"Don't scare me\n{ctx.author.name}!"
+        speech = f"You scared me\n{ctx.author.name}!"
 
     await ctx.send(unlurk_response)
     send_to_db(reaction, speech)
