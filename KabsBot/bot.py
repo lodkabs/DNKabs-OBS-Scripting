@@ -97,7 +97,7 @@ async def event_message(ctx):
             noticed_users.append(ctx.author.name)
             greeted_users.append(ctx.author.name)
 
-            send_to_db("notice", f"Hi\n{ctx.author.name}")
+            send_to_db("notice", f"Happy to see you\n{ctx.author.name}")
 
         elif ctx.author.name not in greeted_users:
             await ctx.channel.send(send_greeting(ctx.author.name))

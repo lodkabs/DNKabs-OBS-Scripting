@@ -4,7 +4,8 @@ greet_responses = [
         "Hey Kabs, {NAME} is here, isn't that awesome? :D",
         "Eeey, it's {NAME}, nice B)",
         "{NAME}! I was hoping you'd make it <3",
-        "Hello {NAME}, how are you functioning today? VoHiYo"
+        "Hello {NAME}, how are you functioning today? VoHiYo",
+        "A wild {NAME} has appeared! YehePelo"
         ]
 
 lurk_responses = [
