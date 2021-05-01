@@ -172,12 +172,12 @@ async def so(ctx):
         msg_list = ctx.content.split()
 
         if len(msg_list) < 2:
-            await ctx.send(f"You\'ve gotta give me ")
+            await ctx.send(f"You\'ve gotta give me someone to shoutout!")
         so_user = msg_list[1]
         if so_user[0] != "@":
             await ctx.send("Sorry, I get confused if you don\'t tag the shoutout SirSad")
         else:
-            await ctx.send(f"GivePLZ Go give {so_user} some love at https://www.twitch.tv/{so_user.strip('@')} TakeNRG")
+            await ctx.send(f"GivePLZ Go give {so_user} a <3 at https://www.twitch.tv/{so_user.strip('@')} TakeNRG")
             send_to_db("shoutout", f"Go follow\n{so_user.strip('@')}!")
 
 

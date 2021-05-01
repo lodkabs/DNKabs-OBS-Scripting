@@ -1,6 +1,3 @@
-# Improvement:
-# Use watchdog module by following tutorial: http://thepythoncorner.com/dev/how-to-create-a-watchdog-in-python-to-look-for-filesystem-changes/
-
 import obspython as obs
 import os
 import sys
@@ -34,6 +31,15 @@ image_path = location + "/images/kabs_bot"
 db = None
 records = []
 next_line = 0
+
+silent_time = 0
+silence_filler = [
+        ("unlurk", "We can hangout and\n!lurk together"),
+        ("greeting", "Let me know when\nyou want to !unlurk"),
+        ("github", "I live on\n!github"),
+        ("greeting", "I hope everyone\nis doing well~")
+        ]
+silent_place = 0
 
 
 def populate_variables():
@@ -96,6 +102,23 @@ def populate_variables():
     obs.obs_sceneitem_set_visible(box_scene, False)
 
     obs.timer_add(bot_speak, 1000)
+    obs.timer_add(silence_check, 1000)
+
+def silence_check():
+    global db, silent_time, silence_filler, silent_place
+
+    if silent_time <= 300:
+        silent_time += 1
+    else:
+        sql = f"""INSERT INTO reactions (timestamp, reaction, speech, shown)
+              VALUES ('{datetime.datetime.now()}', '{silence_filler[silent_place][0]}', '{silence_filler[silent_place][1]}', False);"""
+
+        cur = db.cursor()
+        cur.execute(sql)
+        db.commit()
+
+        silent_place = (silent_place + 1) % len(silence_filler)
+        silent_time = 0
 
 
 def bot_speak():
@@ -119,7 +142,9 @@ def bot_speak():
 
 def bot_reaction():
     global box_scene, records, next_line
-    global db
+    global db, silent_time
+
+    silent_time = 0
 
     if next_line < len(records):
         bot_image_set(records[next_line][2])
