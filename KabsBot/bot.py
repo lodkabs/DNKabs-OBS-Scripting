@@ -3,10 +3,11 @@
 
 import os
 from random import randrange
-from twitchio.ext import commands
 import psycopg2
 import signal
 import datetime
+
+from twitchio.ext import commands
 
 import responses
 
@@ -19,7 +20,10 @@ bot = commands.Bot(
     client_id=os.environ['CLIENT_ID'],
     nick=bot_name,
     prefix=os.environ['BOT_PREFIX'],
-    initial_channels=[streamer_name]
+    initial_channels=[streamer_name],
+    api_token=os.environ['ACCESS_TOKEN'],
+    new_client_id=os.environ['NEW_CLIENT_ID'],
+    client_secret=os.environ['CLIENT_SECRET']
 )
 
 # Database handling
@@ -97,17 +101,21 @@ async def event_message(ctx):
             noticed_users.append(ctx.author.name)
             greeted_users.append(ctx.author.name)
 
-            send_to_db("notice", f"Happy to see you\n{ctx.author.name}")
+            send_to_db("notice", f"Happy to see you\n{ctx.author.name}~")
 
         elif ctx.author.name not in greeted_users:
             await ctx.channel.send(send_greeting(ctx.author.name))
             greeted_users.append(ctx.author.name)
+
+            send_to_db("greeting", f"Hello\n{ctx.author.name}!")
     else:
         if ctx.author.name not in greeted_users:
             greeted_users.append(ctx.author.name)
 
         is_command = False
 
+
+###### Commands ######
 
 @bot.command(name="lurk")
 async def lurk(ctx):
@@ -153,6 +161,37 @@ async def unlurk(ctx):
     await ctx.send(unlurk_response)
     send_to_db(reaction, speech)
 
+
+@bot.command(name="so")
+async def so(ctx):
+    global is_command
+
+    is_command = True
+
+    if ctx.author.is_mod:
+        msg_list = ctx.content.split()
+
+        if len(msg_list) < 2:
+            await ctx.send(f"You\'ve gotta give me ")
+        so_user = msg_list[1]
+        if so_user[0] != "@":
+            await ctx.send("Sorry, I get confused if you don\'t tag the shoutout SirSad")
+        else:
+            await ctx.send(f"GivePLZ Go give {so_user} some love at https://www.twitch.tv/{so_user.strip('@')} TakeNRG")
+            send_to_db("shoutout", f"Go follow\n{so_user.strip('@')}!")
+
+
+
+@bot.command(name="github")
+async def github(ctx):
+    global is_command
+
+    is_command = True
+
+    await ctx.send("You can learn more about me here: https://github.com/lodkabs/DNKabs-OBS-Scripting Kappu")
+
+
+###### Other functions ######
 
 def send_greeting(name):
     randnum = randrange(len(responses.greet_responses))

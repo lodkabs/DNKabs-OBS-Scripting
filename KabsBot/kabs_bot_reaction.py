@@ -95,7 +95,7 @@ def populate_variables():
     box_scene = get_sceneitem_from_source_name_in_current_scene(box_name)
     obs.obs_sceneitem_set_visible(box_scene, False)
 
-    obs.timer_add(bot_speak, 2000)
+    obs.timer_add(bot_speak, 1000)
 
 
 def bot_speak():
@@ -138,7 +138,7 @@ def bot_reaction():
         obs.obs_sceneitem_set_visible(box_scene, False)
         bot_image_set("neutral")
         next_line = 0
-        obs.timer_add(bot_speak, 2000)
+        obs.timer_add(bot_speak, 1000)
 
 
 def bot_image_set(state):
