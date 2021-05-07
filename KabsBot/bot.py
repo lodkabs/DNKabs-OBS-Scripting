@@ -26,7 +26,9 @@ bot = commands.Bot(
     client_secret=os.environ['CLIENT_SECRET']
 )
 
-# Database handling
+
+###### Database handling #######
+
 try:
     db = psycopg2.connect(
             database=os.environ['KABSBOT_DB_NAME'],
@@ -53,14 +55,21 @@ def keyboardInterruptHandler(signal, frame):
 signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
 def send_to_db(reaction, speech):
-    global db
-    sql = f"""INSERT INTO reactions (timestamp, reaction, speech, shown)
-              VALUES ('{datetime.datetime.now()}', '{reaction}', '{speech}', False);"""
+    global streamer_name
 
-    cur = db.cursor()
-    cur.execute(sql)
-    db.commit()
+    if streamer_name.lower() == 'dnkabs':
+        global db
 
+        sql = f"""INSERT INTO reactions (timestamp, reaction, speech, shown)
+                  VALUES ('{datetime.datetime.now()}', '{reaction}', '{speech}', False);"""
+
+        cur = db.cursor()
+        cur.execute(sql)
+        db.commit()
+
+
+
+###### Event handling ######
 
 greeted_users = []
 noticed_users = []
@@ -94,16 +103,26 @@ async def event_message(ctx):
     if not is_command:
         content_string = ctx.content.lower()
         content_set = set(content_string.split())
+        bot_names = {"kabsbot", "kabs bot"}
+        bye_words = {"bye", "goodbye", "farewell"}
 
-        if (bot_name.lower() in content_string or "kabsbot" in content_string) and ctx.author.name not in noticed_users:
-            await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
+        if bot_name.lower() in content_string or content_set.intersection(bot_names):
+            if content_set.intersection(bye_words):
+                randnum = randrange(len(responses.bye_responses))
+                response = response_replaces(responses.bye_responses[randnum], ctx.author.name)
+                print(response)
 
-            noticed_users.append(ctx.author.name)
-            greeted_users.append(ctx.author.name)
+                await ctx.channel.send(response)
 
-            send_to_db("notice", f"Happy to see you\n{ctx.author.name}~")
+            elif ctx.author.name not in noticed_users:
+                await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
 
-        elif ctx.author.name not in greeted_users:
+                noticed_users.append(ctx.author.name)
+                greeted_users.append(ctx.author.name)
+
+                send_to_db("notice", f"Happy to see you\n{ctx.author.name}~")
+
+        elif ctx.author.name not in greeted_users and ctx.author.name.lower() != streamer_name.lower():
             await ctx.channel.send(send_greeting(ctx.author.name))
             greeted_users.append(ctx.author.name)
 
@@ -126,12 +145,12 @@ async def lurk(ctx):
 
     if ctx.author.name in lurk_users:
         randnum = randrange(len(responses.re_lurk_responses))
-        lurk_response = responses.re_lurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        lurk_response = response_replaces(responses.re_lurk_responses[randnum], ctx.author.name)
         reaction = "relurk"
         speech = f"I still see you\n{ctx.author.name}~"
     else:
         randnum = randrange(len(responses.lurk_responses))
-        lurk_response = responses.lurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        lurk_response = response_replaces(responses.lurk_responses[randnum], ctx.author.name)
         lurk_users.append(ctx.author.name)
         reaction = "lurk"
         speech = f"Thanks for lurking\n{ctx.author.name}!"
@@ -148,13 +167,13 @@ async def unlurk(ctx):
 
     if ctx.author.name in lurk_users:
         randnum = randrange(len(responses.unlurk_responses))
-        unlurk_response = responses.unlurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        unlurk_response = response_replaces(responses.unlurk_responses[randnum], ctx.author.name)
         lurk_users.remove(ctx.author.name)
         reaction = "unlurk"
         speech = f"Welcome back\n{ctx.author.name}"
     else:
         randnum = randrange(len(responses.re_unlurk_responses))
-        unlurk_response = responses.re_unlurk_responses[randnum].replace("{NAME}", f"@{ctx.author.name}")
+        unlurk_response = response_replaces(responses.re_unlurk_responses[randnum], ctx.author.name)
         reaction = "reunlurk"
         speech = f"You scared me\n{ctx.author.name}!"
 
@@ -177,7 +196,7 @@ async def so(ctx):
         if so_user[0] != "@":
             await ctx.send("Sorry, I get confused if you don\'t tag the shoutout SirSad")
         else:
-            await ctx.send(f"GivePLZ Go give {so_user} a <3 at https://www.twitch.tv/{so_user.strip('@')} TakeNRG")
+            await ctx.send(f"GivePLZ Go give {so_user} a <3 at https://www.twitch.tv/{so_user.strip('@')}/ TakeNRG")
             send_to_db("shoutout", f"Go follow\n{so_user.strip('@')}!")
 
 
@@ -191,14 +210,37 @@ async def github(ctx):
     await ctx.send("You can learn more about me here: https://github.com/lodkabs/DNKabs-OBS-Scripting Kappu")
 
 
+@bot.command(name="hug")
+async def hug(ctx):
+    global is_command
+
+    is_command = True
+
+    randnum = randrange(len(responses.hug_responses))
+    response = response_replaces(responses.hug_responses[randnum], ctx.author.name)
+
+    await ctx.send(response)
+    send_to_db("notice", f"Aww, so sweet\n{ctx.author.name}")
+
+
+
 ###### Other functions ######
 
 def send_greeting(name):
     randnum = randrange(len(responses.greet_responses))
 
-    greet_response = responses.greet_responses[randnum].replace("{NAME}", f"@{name}")
+    greet_response = response_replaces(responses.greet_responses[randnum], name)
 
     return greet_response
+
+def response_replaces(text, author):
+    global streamer_name
+
+    replaced_text = text.replace("{NAME}", f"@{author}")
+    replaced_text = replaced_text.replace("{STREAMER}", f"@{streamer_name}")
+
+    return replaced_text
+
 
 
 if __name__ == "__main__":

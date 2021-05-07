@@ -1,11 +1,28 @@
 greet_responses = [
         "Hi {NAME}, glad you could make it :)",
         "Woah, {NAME}, great to see you here :O",
-        "Hey Kabs, {NAME} is here, isn't that awesome? :D",
+        "Hey {STREAMER}, {NAME} is here, isn't that awesome? :D",
         "Eeey, it's {NAME}, nice B)",
         "{NAME}! I was hoping you'd make it <3",
         "Hello {NAME}, how are you functioning today? VoHiYo",
         "A wild {NAME} has appeared! TehePelo"
+        ]
+
+bye_responses = [
+        "Thanks for dropping by {NAME}!",
+        "But...I'll miss you {NAME} :(",
+        "Stay safe {NAME} SirShield",
+        "In case {STREAMER} didn't say it, we really appreciate you being here {NAME} <3",
+        "We couldn't have done it without you {NAME} :)",
+        "I'll still be here when you come back {NAME}...you will come back, right? :O"
+        ]
+
+hug_responses = [
+        "Let's have a tea together sometime {NAME} TPFufun",
+        "All the hugs please GivePLZ",
+        "Oh my goodness {NAME}, you're too much! BegWan",
+        "Noooo {NAME}, not in front of the others TehePelo",
+        "Oh great, I'm blushing now, are you happy {NAME}? HSWP"
         ]
 
 lurk_responses = [
