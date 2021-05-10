@@ -108,22 +108,17 @@ async def event_message(ctx):
 
         if bot_name.lower() in content_string or content_set.intersection(bot_names):
             if content_set.intersection(bye_words):
-                randnum = randrange(len(responses.bye_responses))
-                response = response_replaces(responses.bye_responses[randnum], ctx.author.name)
-                print(response)
+                await ctx.channel.send(rand_resp(responses.bye_responses, ctx.author.name))
 
-                await ctx.channel.send(response)
+            else:
+                await ctx.channel.send(rand_resp(responses.notice_responses, ctx.author.name))
 
-            elif ctx.author.name not in noticed_users:
-                await ctx.channel.send(f"@{ctx.author.name} noticed me BegWan")
-
-                noticed_users.append(ctx.author.name)
                 greeted_users.append(ctx.author.name)
 
                 send_to_db("notice", f"Happy to see you\n{ctx.author.name}~")
 
         elif ctx.author.name not in greeted_users and ctx.author.name.lower() != streamer_name.lower():
-            await ctx.channel.send(send_greeting(ctx.author.name))
+            await ctx.channel.send(rand_resp(responses.greet_responses, ctx.author.name))
             greeted_users.append(ctx.author.name)
 
             send_to_db("greeting", f"Hello\n{ctx.author.name}!")
@@ -144,13 +139,11 @@ async def lurk(ctx):
     is_command = True
 
     if ctx.author.name in lurk_users:
-        randnum = randrange(len(responses.re_lurk_responses))
-        lurk_response = response_replaces(responses.re_lurk_responses[randnum], ctx.author.name)
+        lurk_response = rand_resp(responses.re_lurk_responses, ctx.author.name)
         reaction = "relurk"
         speech = f"I still see you\n{ctx.author.name}~"
     else:
-        randnum = randrange(len(responses.lurk_responses))
-        lurk_response = response_replaces(responses.lurk_responses[randnum], ctx.author.name)
+        lurk_response = rand_resp(responses.lurk_responses, ctx.author.name)
         lurk_users.append(ctx.author.name)
         reaction = "lurk"
         speech = f"Thanks for lurking\n{ctx.author.name}!"
@@ -166,14 +159,12 @@ async def unlurk(ctx):
     is_command = True
 
     if ctx.author.name in lurk_users:
-        randnum = randrange(len(responses.unlurk_responses))
-        unlurk_response = response_replaces(responses.unlurk_responses[randnum], ctx.author.name)
+        unlurk_response = rand_resp(responses.unlurk_responses, ctx.author.name)
         lurk_users.remove(ctx.author.name)
         reaction = "unlurk"
         speech = f"Welcome back\n{ctx.author.name}"
     else:
-        randnum = randrange(len(responses.re_unlurk_responses))
-        unlurk_response = response_replaces(responses.re_unlurk_responses[randnum], ctx.author.name)
+        unlurk_response = rand_resp(responses.re_unlurk_responses, ctx.author.name)
         reaction = "reunlurk"
         speech = f"You scared me\n{ctx.author.name}!"
 
@@ -216,8 +207,7 @@ async def hug(ctx):
 
     is_command = True
 
-    randnum = randrange(len(responses.hug_responses))
-    response = response_replaces(responses.hug_responses[randnum], ctx.author.name)
+    response = rand_resp(responses.hug_responses, ctx.author.name)
 
     await ctx.send(response)
     send_to_db("notice", f"Aww, so sweet\n{ctx.author.name}")
@@ -227,14 +217,17 @@ async def hug(ctx):
 ###### Other functions ######
 
 def send_greeting(name):
-    randnum = randrange(len(responses.greet_responses))
-
-    greet_response = response_replaces(responses.greet_responses[randnum], name)
+    greet_response = rand_resp(responses.greet_responses, name)
 
     return greet_response
 
-def response_replaces(text, author):
+
+def rand_resp(resp_list, author):
     global streamer_name
+
+    randnum = randrange(len(resp_list))
+
+    text = resp_list[randnum]
 
     replaced_text = text.replace("{NAME}", f"@{author}")
     replaced_text = replaced_text.replace("{STREAMER}", f"@{streamer_name}")

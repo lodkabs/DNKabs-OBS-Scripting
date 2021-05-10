@@ -8,13 +8,24 @@ greet_responses = [
         "A wild {NAME} has appeared! TehePelo"
         ]
 
+notice_responses = [
+        "{NAME} noticed me BegWan",
+        "{NAME} noticed m-...I mean, whatever, I don't care TehePelo",
+        "I don't understand {NAME}, but I assume you said a nice thing KonCha",
+        "Please {NAME}, tell me more about me TPFufun",
+        "I'm so glad {STREAMER} let me hangout with you {NAME} GivePLZ",
+        "I can't read {NAME}, but let's just say we're friends VirtualHug",
+        "Right back at ya {NAME} FBPass ...what are we talking about?"
+        ]
+
 bye_responses = [
         "Thanks for dropping by {NAME}!",
         "But...I'll miss you {NAME} :(",
         "Stay safe {NAME} SirShield",
         "In case {STREAMER} didn't say it, we really appreciate you being here {NAME} <3",
         "We couldn't have done it without you {NAME} :)",
-        "I'll still be here when you come back {NAME}...you will come back, right? :O"
+        "I'll still be here when you come back {NAME}...you will come back, right? :O",
+        "Bye for now {NAME} KonCha"
         ]
 
 hug_responses = [
@@ -22,7 +33,7 @@ hug_responses = [
         "All the hugs please GivePLZ",
         "Oh my goodness {NAME}, you're too much! BegWan",
         "Noooo {NAME}, not in front of the others TehePelo",
-        "Oh great, I'm blushing now, are you happy {NAME}? HSWP"
+        "Oh great, I'm blushing now, are you happy {NAME}? BegWan"
         ]
 
 lurk_responses = [
