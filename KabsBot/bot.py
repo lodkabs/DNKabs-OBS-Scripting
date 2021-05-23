@@ -26,28 +26,30 @@ bot = commands.Bot(
     client_secret=os.environ['CLIENT_SECRET']
 )
 
+kabs_stream = (streamer_name.lower() == 'dnkabs')
 
 ###### Database handling #######
 
-try:
-    db = psycopg2.connect(
-            database=os.environ['KABSBOT_DB_NAME'],
-            user=os.environ['KABSBOT_DB_USER'],
-            password=os.environ['KABSBOT_DB_PASSWORD'],
-            host=os.environ['KABSBOT_DB_HOST'],
-            port=os.environ['KABSBOT_DB_PORT']
-    )
-except:
-    print("Could not connect to database!")
-    db = None
-else:
-    print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
-finally:
-    pass
+if kabs_stream:
+    try:
+        db = psycopg2.connect(
+                database=os.environ['KABSBOT_DB_NAME'],
+                user=os.environ['KABSBOT_DB_USER'],
+                password=os.environ['KABSBOT_DB_PASSWORD'],
+                host=os.environ['KABSBOT_DB_HOST'],
+                port=os.environ['KABSBOT_DB_PORT']
+        )
+    except:
+        print("Could not connect to database!")
+        db = None
+    else:
+        print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
+    finally:
+        pass
 
 def keyboardInterruptHandler(signal, frame):
     print(f"\nKeyboardInterrupt (ID: {signal}) has been caught.\n")
-    if db:
+    if kabs_stream and db:
         db.close()
         print(f"Disconnected from {os.environ['KABSBOT_DB_NAME']} database.\n")
     exit(0)
@@ -55,9 +57,9 @@ def keyboardInterruptHandler(signal, frame):
 signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
 def send_to_db(reaction, speech):
-    global streamer_name
+    global kabs_stream
 
-    if streamer_name.lower() == 'dnkabs':
+    if kabs_stream:
         global db
 
         sql = f"""INSERT INTO reactions (timestamp, reaction, speech, shown)
@@ -187,7 +189,7 @@ async def so(ctx):
         if so_user[0] != "@":
             await ctx.send("Sorry, I get confused if you don\'t tag the shoutout SirSad")
         else:
-            await ctx.send(f"GivePLZ Go give {so_user} a <3 at https://www.twitch.tv/{so_user.strip('@')}/ TakeNRG")
+            await ctx.send(f"GivePLZ Go give {so_user} a <3 at https://www.twitch.tv/{so_user.strip('@')}/")
             send_to_db("shoutout", f"Go follow\n{so_user.strip('@')}!")
 
 
