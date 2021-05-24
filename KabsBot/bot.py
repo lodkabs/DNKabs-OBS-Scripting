@@ -76,6 +76,7 @@ def send_to_db(reaction, speech):
 greeted_users = []
 noticed_users = []
 lurk_users = []
+bop_count = 0
 
 is_command = False
 
@@ -214,6 +215,33 @@ async def hug(ctx):
     await ctx.send(response)
     send_to_db("notice", f"Aww, so sweet\n{ctx.author.name}")
 
+
+@bot.command(name="bop")
+async def bop(ctx):
+    global is_command, bop_count
+
+    if ctx.author.is_mod:
+        is_command = True
+        bop_count += 1
+
+        if bop_count == 1:
+            response = "I'm honoured to have witnessed my first bop TPcrunchyroll"
+        else:
+            response = f"Bop number {bop_count}! " + rand_resp(responses.bop_responses, ctx.author.name)
+
+        await ctx.send(response)
+        send_to_db("reunlurk", f"Oh no!\nWe got this~")
+
+@bot.command(name="bopcount")
+async def bopcount(ctx):
+    global is_command, bop_count
+
+    is_command = True
+
+    if bop_count == 0:
+        await ctx.send("I have not been informed of any bops so far. Nice! HSWP")
+    else:
+        await ctx.send(f"The bop count is currently at {bop_count}! ...is that a lot? GunRun")
 
 
 ###### Other functions ######

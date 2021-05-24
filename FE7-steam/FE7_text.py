@@ -9,8 +9,6 @@ filter_name     = "Scroll"
 location        = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 text_file_name  = "rule_set.txt"
 text_file       = f"{location}/{text_file_name}"
-arrow_file_name = "arrow_pos.txt"
-arrow_file      = f"{location}/{arrow_file_name}"
 
 # Global variables for rules source
 rules_source        = None
@@ -23,7 +21,6 @@ rules_list          = []
 arrow_name     = "Arrow_Gif"
 arrow_source   = None
 arrow_scene    = None
-arrow_pos_list = []
 
 # Global variables for scroll effect
 next_line     = 0
@@ -122,10 +119,10 @@ def remove_rules():
 
 
 def reset_rules_variables():
-    global source_name, filter_name, text_file, arrow_file
+    global source_name, filter_name, text_file
     global rules_source, rules_data, rules_list
     global rules_filter_source, rules_filter_data
-    global arrow_name, arrow_source, arrow_scene, arrow_pos_list
+    global arrow_name, arrow_source, arrow_scene
     global next_line, next_char, time_per_char, display_time
 
     ok = True
@@ -133,10 +130,6 @@ def reset_rules_variables():
     # Get rule set from local file
     with open(text_file) as f:
         rules_list = f.read().splitlines()
-
-    # Get arrow positions from local file
-    with open(arrow_file) as a:
-        arrow_pos_list = a.read().splitlines()
 
     # Get sources
     if ok and source_name:
@@ -184,7 +177,7 @@ def reset_rules_variables():
 
     # Set timer for scrolling effect
     if ok:
-        arrow_next_to_text()
+        obs.obs_sceneitem_set_visible(arrow_scene, True)
         next_line = 1
         line_lens = sorted(set([len(x) for x in rules_list]))
         max_len = line_lens[-1]
@@ -202,22 +195,6 @@ def set_scroll_speed(speed):
     global rules_filter_source, rules_filter_data
     obs.obs_data_set_int(rules_filter_data, "speed_y", speed)
     obs.obs_source_update(rules_filter_source, rules_filter_data)
-
-def arrow_next_to_text():
-    global arrow_scene, next_line, arrow_pos_list
-
-    pos = obs.vec2()
-    pos.x = 0
-    pos.y = 0
-
-    obs.obs_sceneitem_get_pos(arrow_scene, pos)
-
-    a_pos = obs.vec2()
-    a_pos.x = float(arrow_pos_list[next_line])
-    a_pos.y = pos.y
-
-    obs.obs_sceneitem_set_pos(arrow_scene, a_pos)
-    obs.obs_sceneitem_set_visible(arrow_scene, True)
 
 
 # First, scroll text upwards off screen
@@ -242,13 +219,13 @@ def rules_line_type():
 
 # Finally, "type out" new line
 def rules_wipe_effect():
-    global rules_list, next_line, next_char
+    global rules_list, next_line, next_char, arrow_scene
 
     text_line = rules_list[next_line]
     no_of_chars = len(text_line)
 
     if next_char > no_of_chars:
-        arrow_next_to_text()
+        obs.obs_sceneitem_set_visible(arrow_scene, True)
         next_char = 1
         next_line = (next_line + 1) % len(rules_list)
         obs.timer_remove(rules_wipe_effect)

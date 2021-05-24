@@ -58,3 +58,9 @@ re_unlurk_responses = [
         "AH, you were lurking {NAME}? Don't scare me like that PunOko",
         "I didn't realise you were lurking {NAME}, why didn't you tell me? :("
         ]
+
+bop_responses = [
+        "Oh dear {STREAMER}... TearGlove",
+        "You got this {STREAMER}, I believe! TehePelo",
+        "I'm not going to lie {STREAMER}, that was a bit funny TPFufun"
+        ]
