@@ -8,6 +8,7 @@ import signal
 import datetime
 
 from twitchio.ext import commands
+from twitch import TwitchClient
 
 import responses
 
@@ -25,6 +26,9 @@ bot = commands.Bot(
     new_client_id=os.environ['NEW_CLIENT_ID'],
     client_secret=os.environ['CLIENT_SECRET']
 )
+
+# Docs: https://python-twitch-client.readthedocs.io/en/latest/index.html
+client = TwitchClient(client_id=os.environ['CLIENT_ID'], oauth_token=os.environ['ACCESS_TOKEN'])
 
 kabs_stream = (streamer_name.lower() == 'dnkabs')
 
@@ -186,12 +190,19 @@ async def so(ctx):
 
         if len(msg_list) < 2:
             await ctx.send(f"You\'ve gotta give me someone to shoutout!")
-        so_user = msg_list[1]
-        if so_user[0] != "@":
-            await ctx.send("Sorry, I get confused if you don\'t tag the shoutout SirSad")
         else:
-            await ctx.send(f"GivePLZ Go give {so_user} a <3 at https://www.twitch.tv/{so_user.strip('@')}/")
-            send_to_db("shoutout", f"Go follow\n{so_user.strip('@')}!")
+            username = msg_list[1].strip('@')
+            user = client.users.translate_usernames_to_ids([username])
+            if user:
+                response = f"GivePLZ Go give {username} a <3 at https://www.twitch.tv/{username}"
+                user_id = int(user[0]['id'])
+                user_info = client.channels.get_by_id(user_id)
+
+                if 'game' in user_info and user_info['game']:
+                    response += f" | I saw them playing {user_info['game']} earlier TakeNRG"
+
+                await ctx.send(response)
+                send_to_db("shoutout", f"Go follow\n{username}!")
 
 
 
