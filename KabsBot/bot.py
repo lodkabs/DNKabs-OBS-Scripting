@@ -309,7 +309,7 @@ async def hakurei(ctx):
     global is_command
 
     is_command = True
-    await ctx.send("A new competitive Touhou event is taking place! https://en.touhougarakuta.com/news-en/hakurei-league-announcement")
+    await ctx.send("A new competitive Touhou event is taking place! https://www.twitch.tv/hakureileague")
 
 
 ###### Other functions ######
