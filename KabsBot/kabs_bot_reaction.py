@@ -38,7 +38,11 @@ silence_filler = [
         ("unlurk", "We can hangout and\n!lurk together"),
         ("greeting", "Let me know when\nyou want to !unlurk"),
         ("github", "I live on\n!github"),
-        ("greeting", "I hope everyone\nis doing well~")
+        ("greeting", "I hope everyone\nis doing well~"),
+        ("notice", "I am, in fact,\na !plushie"),
+        ("greeting", "!hakurei has been\nannounced!"),
+        ("greeting", "I like to keep\na !bopcount..."),
+        ("greeting", "Please let me know\nwhen a !bop happens~")
         ]
 silent_place = 0
 

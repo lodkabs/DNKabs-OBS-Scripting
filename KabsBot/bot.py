@@ -2,6 +2,7 @@
 # Ensure you're in the same directory as this script!
 
 import os
+import sys
 from random import randrange
 import psycopg2
 import signal
@@ -30,7 +31,14 @@ bot = commands.Bot(
 # Docs: https://python-twitch-client.readthedocs.io/en/latest/index.html
 client = TwitchClient(client_id=os.environ['CLIENT_ID'], oauth_token=os.environ['ACCESS_TOKEN'])
 
+# Global control variables
 kabs_stream = (streamer_name.lower() == 'dnkabs')
+if "-disablegreeting" in sys.argv:
+    disable_greeting = True
+    print("Disabled greeting")
+else:
+    disable_greeting = False
+    print("Greeting not disabled")
 
 ###### Database handling #######
 
@@ -95,7 +103,7 @@ async def event_ready():
 async def event_message(ctx):
     'Runs every time a message is sent in chat.'
 
-    global bot_name, streamer_name, greetings, greeted_users
+    global bot_name, streamer_name, greetings, greeted_users, disable_greeting
     global is_command
 
     # make sure the bot ignores itself
@@ -125,7 +133,8 @@ async def event_message(ctx):
                 send_to_db("notice", f"Happy to see you\n{ctx.author.name}~")
 
         elif ctx.author.name not in greeted_users and ctx.author.name.lower() != streamer_name.lower():
-            await ctx.channel.send(rand_resp(responses.greet_responses, ctx.author.name))
+            if not disable_greeting:
+                await ctx.channel.send(rand_resp(responses.greet_responses, ctx.author.name))
             greeted_users.append(ctx.author.name)
 
             send_to_db("greeting", f"Hello\n{ctx.author.name}!")
@@ -231,17 +240,26 @@ async def hug(ctx):
 async def bop(ctx):
     global is_command, bop_count
 
-    if ctx.author.is_mod:
+    is_command = True
+    bop_count += 1
+
+    if bop_count == 1:
+        response = "I'm honoured to have witnessed my first bop TPcrunchyroll"
+    else:
+        response = f"Bop number {bop_count}! " + rand_resp(responses.bop_responses, ctx.author.name)
+
+    await ctx.send(response)
+    send_to_db("reunlurk", f"Oh no!\nWe got this~")
+
+@bot.command(name="bopremove")
+async def bopremove(ctx):
+    global is_command, bop_count
+
+    if ctx.author.is_mod and bop_count > 0:
         is_command = True
-        bop_count += 1
+        bop_count -= 1
 
-        if bop_count == 1:
-            response = "I'm honoured to have witnessed my first bop TPcrunchyroll"
-        else:
-            response = f"Bop number {bop_count}! " + rand_resp(responses.bop_responses, ctx.author.name)
-
-        await ctx.send(response)
-        send_to_db("reunlurk", f"Oh no!\nWe got this~")
+        await ctx.send(f"I was misinformed! The bop count is now at {bop_count}")
 
 @bot.command(name="bopcount")
 async def bopcount(ctx):
@@ -253,6 +271,45 @@ async def bopcount(ctx):
         await ctx.send("I have not been informed of any bops so far. Nice! HSWP")
     else:
         await ctx.send(f"The bop count is currently at {bop_count}! ...is that a lot? GunRun")
+
+
+@bot.command(name="plushie")
+async def plushie(ctx):
+    global is_command
+
+    is_command = True
+
+    await ctx.send("Come get an adorable plushie! (like me): https://www.sleepywaifu.com/ <3")
+
+
+@bot.command(name="disablegreeting")
+async def disablegreeting(ctx):
+    global is_command, disable_greeting
+
+    if ctx.author.is_mod:
+        is_command = True
+        disable_greeting = True
+
+        await ctx.send("I'll keep quiet, thanks for letting me know :)")
+
+
+@bot.command(name="enablegreeting")
+async def enablegreeting(ctx):
+    global is_command, disable_greeting
+
+    if ctx.author.is_mod:
+        is_command = True
+        disable_greeting = False
+
+        await ctx.send("Ready to greet people :D")
+
+
+@bot.command(name="hakurei")
+async def hakurei(ctx):
+    global is_command
+
+    is_command = True
+    await ctx.send("A new competitive Touhou event is taking place! https://en.touhougarakuta.com/news-en/hakurei-league-announcement")
 
 
 ###### Other functions ######
