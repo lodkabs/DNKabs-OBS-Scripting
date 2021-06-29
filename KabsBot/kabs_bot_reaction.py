@@ -35,6 +35,7 @@ next_line = 0
 silent_time = 0
 silence_filler = [
         ("greeting", "I like getting\na !hug"),
+        ("greeting", "I like giving a !hug\nto others as well"),
         ("unlurk", "We can hangout and\n!lurk together"),
         ("greeting", "Let me know when\nyou want to !unlurk"),
         ("github", "I live on\n!github"),

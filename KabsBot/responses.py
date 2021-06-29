@@ -36,6 +36,24 @@ hug_responses = [
         "Oh great, I'm blushing now, are you happy {NAME}? BegWan"
         ]
 
+hug_user_responses = [
+        [
+            "MrDestructoid TRANSMITTING HUG",
+            "{NAME} *hugs* <3",
+            "MrDestructoid HUG TRANSMISSION COMPLETE"
+        ],
+        [
+            "Someone was too embarrased to hug you, so they sent me, {NAME}",
+            "Aww, you're blushing too {NAME}? That's so cute BegWan"
+        ],
+        [
+            "*hugs* {NAME} <3",
+            "Hmmm...",
+            "Here, have another one {NAME} *hugs* TehePelo"
+        ],
+        ]
+
+
 lurk_responses = [
         "Thanks for hanging out {NAME}!",
         "Help me take out the shadow monsters {NAME}! SirMad",

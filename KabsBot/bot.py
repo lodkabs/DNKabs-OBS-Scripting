@@ -7,6 +7,7 @@ from random import randrange
 import psycopg2
 import signal
 import datetime
+from time import sleep
 
 from twitchio.ext import commands
 from twitch import TwitchClient
@@ -201,17 +202,20 @@ async def so(ctx):
             await ctx.send(f"You\'ve gotta give me someone to shoutout!")
         else:
             username = msg_list[1].strip('@')
-            user = client.users.translate_usernames_to_ids([username])
-            if user:
-                response = f"GivePLZ Go give {username} a <3 at https://www.twitch.tv/{username}"
-                user_id = int(user[0]['id'])
-                user_info = client.channels.get_by_id(user_id)
+            if username.lower() == 'robertskmiles':
+                response = "AI Safety is important! (and really interesting) Check it out: https://www.youtube.com/c/RobertMilesAI"
+            else:
+                user = client.users.translate_usernames_to_ids([username])
+                if user:
+                    response = f"GivePLZ Go give {username} a <3 at https://www.twitch.tv/{username}"
+                    user_id = int(user[0]['id'])
+                    user_info = client.channels.get_by_id(user_id)
 
-                if 'game' in user_info and user_info['game']:
-                    response += f" | I saw them playing {user_info['game']} earlier TakeNRG"
+                    if 'game' in user_info and user_info['game']:
+                        response += f" | I saw them playing {user_info['game']} earlier TakeNRG"
 
-                await ctx.send(response)
-                send_to_db("shoutout", f"Go follow\n{username}!")
+            await ctx.send(response)
+            send_to_db("shoutout", f"Go follow\n{username}!")
 
 
 
@@ -230,10 +234,22 @@ async def hug(ctx):
 
     is_command = True
 
-    response = rand_resp(responses.hug_responses, ctx.author.name)
+    msg_list = ctx.content.split()
 
-    await ctx.send(response)
-    send_to_db("notice", f"Aww, so sweet\n{ctx.author.name}")
+    if len(msg_list) > 1:
+        username = msg_list[1].strip('@')
+
+    if len(msg_list) < 2 or username.lower() in [bot_name.lower(), 'kabsbot']:
+        response = rand_resp(responses.hug_responses, ctx.author.name)
+        await ctx.send(response)
+        send_to_db("notice", f"Aww, so sweet\n{ctx.author.name}")
+    else:
+        resp_lines = rand_resp(responses.hug_user_responses, username)
+        for resp_line in resp_lines:
+            await ctx.send(resp_line)
+            sleep(1)
+        send_to_db("notice", f"{username} <3\n{ctx.author.name} <3")
+
 
 
 @bot.command(name="bop")
@@ -327,8 +343,14 @@ def rand_resp(resp_list, author):
 
     text = resp_list[randnum]
 
-    replaced_text = text.replace("{NAME}", f"@{author}")
-    replaced_text = replaced_text.replace("{STREAMER}", f"@{streamer_name}")
+    if isinstance(text, str):
+        replaced_text = text.replace("{NAME}", f"@{author}")
+        replaced_text = replaced_text.replace("{STREAMER}", f"@{streamer_name}")
+    elif isinstance(text, list):
+        replaced_text = list()
+        for count, line in enumerate(text):
+            replaced_text.append(line.replace("{NAME}", f"@{author}"))
+            replaced_text[count] = replaced_text[count].replace("{STREAMER}", f"@{streamer_name}")
 
     return replaced_text
 
