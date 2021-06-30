@@ -7,7 +7,7 @@ from random import randrange
 import psycopg2
 import signal
 import datetime
-from time import sleep
+import asyncio
 
 from twitchio.ext import commands
 from twitch import TwitchClient
@@ -247,7 +247,7 @@ async def hug(ctx):
         resp_lines = rand_resp(responses.hug_user_responses, username)
         for resp_line in resp_lines:
             await ctx.send(resp_line)
-            sleep(1)
+            await asyncio.sleep(2)
         send_to_db("notice", f"{username} <3\n{ctx.author.name} <3")
 
 
