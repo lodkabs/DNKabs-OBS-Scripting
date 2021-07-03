@@ -1,9 +1,0 @@
-No restrictions on using female units
-No restrictions on using Bartre up to a Lv5 Warrior
-No restrictions on NPC units
-Male units cannot deal damage
-Male units cannot use staffs
-Male unit cannot rescue nor drop female units
-(any other rescue/drop is allowed)
-Anything not listed in the rules is allowed
-(rules can be updated as we go along)

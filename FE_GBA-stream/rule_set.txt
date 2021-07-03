@@ -1,0 +1,4 @@
+Units do not gain any stats on level up
+Units still gain stats on promotion
+Use of stats boosting items are allowed
+No battles outside the story allowed

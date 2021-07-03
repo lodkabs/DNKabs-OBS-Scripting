@@ -148,6 +148,28 @@ async def event_message(ctx):
 
 ###### Commands ######
 
+@bot.command(name="charity")
+async def charity(ctx):
+    global is_command
+    global kabs_stream
+
+    if kabs_stream:
+        is_command = True
+
+        await ctx.send("This month we are supporting Medical Aid for Palestinians (MAP). Check them out and !donate if you can: https://www.map.org.uk ShowOfHands")
+
+
+@bot.command(name="donate")
+async def donate(ctx):
+    global is_command
+    global kabs_stream
+
+    if kabs_stream:
+        is_command = True
+
+        await ctx.send("Donate to Medical Aid for Palestinians here! https://streamlabscharity.com/@dnkabs/july-2021-fundraising BegWan")
+
+
 @bot.command(name="lurk")
 async def lurk(ctx):
     global lurk_users

@@ -1,11 +1,11 @@
 Been practising writing Python scripts to be added to OBS software.
 
-Anything in a directory (e.g. FE7-stream) is specifically for my own stream [DNKabs](https://www.twitch.tv/dnkabs).<br />
+Anything in a directory (e.g. FE_GBA-stream) is specifically for my own stream [DNKabs](https://www.twitch.tv/dnkabs).<br />
 For scripts outside any directroy, I've tried to make them for generic use.<br />
 Feel free to use any of it, though I can't guarantee performance.<br />
 The Python scripting documentation can be found [here](https://obsproject.com/docs/scripting.html)
 
-I've been using the following:
+I've been using the following for the OBS python scripts:
 - OBS 26.1.1
 - Windows 10 64-bit
 - Python 3.6.8
