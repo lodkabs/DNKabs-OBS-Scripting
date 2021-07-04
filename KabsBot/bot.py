@@ -289,8 +289,8 @@ async def bop(ctx):
     await ctx.send(response)
     send_to_db("reunlurk", f"Oh no!\nWe got this~")
 
-@bot.command(name="bopremove")
-async def bopremove(ctx):
+@bot.command(name="unbop")
+async def unbop(ctx):
     global is_command, bop_count
 
     if ctx.author.is_mod and bop_count > 0:
