@@ -26,6 +26,9 @@ speech_data   = None
 box_name  = "Speech_Box"
 box_scene = None
 
+coffee_name = "Coffee"
+coffee_scene = None
+
 image_path = location + "/images/kabs_bot"
 
 db = None
@@ -55,6 +58,7 @@ def populate_variables():
     global image_name, image_source, image_data, image_path
     global speech_name, speech_source, speech_data
     global box_name, box_scene
+    global coffee_name, coffee_scene
     global db
 
     obs.timer_remove(bot_speak)
@@ -87,6 +91,9 @@ def populate_variables():
     if box_scene:
         obs.obs_sceneitem_release(box_scene)
 
+    if coffee_scene:
+        obs.obs_sceneitem_release(coffee_scene)
+
     ok1 = ok2 = False
     sources = obs.obs_enum_sources()
     for source in sources:
@@ -109,6 +116,8 @@ def populate_variables():
 
     box_scene = get_sceneitem_from_source_name_in_current_scene(box_name)
     obs.obs_sceneitem_set_visible(box_scene, False)
+
+    coffee_scene = get_sceneitem_from_source_name_in_current_scene(coffee_name)
 
     obs.timer_add(bot_speak, 1000)
     obs.timer_add(silence_check, 1000)
@@ -150,10 +159,13 @@ def bot_speak():
 
 
 def bot_reaction():
-    global box_scene, records, next_line
+    global box_scene, coffee_scene, records, next_line
     global db, silent_time
 
     silent_time = 0
+
+    if not obs.obs_sceneitem_visible(coffee_scene):
+        obs.obs_sceneitem_set_visible(coffee_scene, True)
 
     if next_line < len(records):
         bot_image_set(records[next_line][2])
@@ -177,8 +189,14 @@ def bot_reaction():
 
 def bot_image_set(state):
     global image_source, image_data, image_path
+    global coffee_scene
 
-    obs.obs_data_set_string(image_data, "file", f"{image_path}_{state}.gif")
+    if state == "coffee":
+        obs.obs_sceneitem_set_visible(coffee_scene, False)
+        obs.obs_data_set_string(image_data, "file", f"{image_path}_greeting.gif")
+    else:
+        obs.obs_data_set_string(image_data, "file", f"{image_path}_{state}.gif")
+
     obs.obs_source_update(image_source, image_data)
 
 
@@ -206,7 +224,7 @@ def script_update(settings):
     populate_variables()
 
 def script_unload(settings):
-    global image_data, speech_data, box_scene, db
+    global image_data, speech_data, box_scene, coffee_scene, db
 
     if db:
         db.close()
@@ -214,4 +232,5 @@ def script_unload(settings):
     obs.obs_data_release(image_data)
     obs.obs_data_release(speech_data)
     obs.obs_sceneitem_release(box_scene)
+    obs.obs_sceneitem_release(coffee_scene)
 

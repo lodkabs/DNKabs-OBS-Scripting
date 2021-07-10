@@ -167,7 +167,7 @@ async def donate(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Donate to Medical Aid for Palestinians here! https://streamlabscharity.com/@dnkabs/july-2021-fundraising BegWan")
+        await ctx.send("Donate to Medical Aid for Palestinians here! https://streamlabscharity.com/@dnkabs/july-2021-fundraising dnkabsHeart")
 
 
 @bot.command(name="lurk")
