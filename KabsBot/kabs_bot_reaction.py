@@ -47,7 +47,6 @@ silence_filler = [
         ("github", "I live on\n!github"),
         ("greeting", "I hope everyone\nis doing well~"),
         ("notice", "I am, in fact,\na !plushie"),
-        ("greeting", "!hakurei has\nstarted!"),
         ("greeting", "I like to keep\na !bopcount..."),
         ("greeting", "Please let me know\nwhen a !bop happens~")
         ]
