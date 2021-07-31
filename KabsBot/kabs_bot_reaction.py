@@ -40,7 +40,6 @@ silence_filler = [
         ("greeting", "Check out the !charity\nwe are supporting"),
         ("notice", "If you are able to,\nplease !donate"),
         ("greeting", "I like getting\na !hug"),
-        ("greeting", "I like getting\na !hug"),
         ("greeting", "I like giving a !hug\nto others as well"),
         ("unlurk", "We can hangout and\n!lurk together"),
         ("greeting", "Let me know when\nyou want to !unlurk"),

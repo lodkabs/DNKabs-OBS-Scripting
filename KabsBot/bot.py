@@ -156,7 +156,7 @@ async def charity(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("This month we are supporting Medical Aid for Palestinians (MAP). Check them out and !donate if you can: https://www.map.org.uk ShowOfHands")
+        await ctx.send("This month we are supporting SpecialEffect! Check them out and !donate if you can: https://www.specialeffect.org.uk/ ShowOfHands")
 
 
 @bot.command(name="donate")
@@ -167,7 +167,7 @@ async def donate(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Donate to Medical Aid for Palestinians here! https://streamlabscharity.com/@dnkabs/july-2021-fundraising dnkabsHeart")
+        await ctx.send("Donate to SpecialEffect here! https://streamlabscharity.com/@dnkabs/august-2021-fundraising dnkabsHeart")
 
 
 @bot.command(name="lurk")
