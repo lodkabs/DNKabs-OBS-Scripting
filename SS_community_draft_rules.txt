@@ -9,8 +9,22 @@ Gameplay:
 - The game will be played on Ephraim Normal Mode
 - We are soul linking i.e. If a unit dies we all bench them (at the end of the current chapter)
 - If a lord dies, the player losing the lord must restart the chapter (but any benched units remain benched)
-- Undrafted units may recruit characters, rescue undrafted units and NPCs, trade, use items, visit vendors / armories, visit villages, enter combat without attacking (meatshielding), sustain status (and enter combat if berserked), and dig up items in the desert.
-- Undrafted units may not be deployed from the preps menu (to do any of the tasks above, EXCEPT if they can recruit another unit in that chapter), attack, counterattack, use staves, summon, rescue / carry drafted units, or open doors / chests.
+- Undrafted units are allowed to:
+	- Recruit characters
+	- Rescue undrafted units and NPCs
+	- Trade
+	- Use items
+	- Visit vendors, armories and villages
+	- Enter combat without attacking (meatshielding)
+	- Sustain status (and enter combat if berserked)
+	- Dig up items in the desert
+- Undrafted units are NOT allowed to:
+	- Be deployed from the preps menu (to do any of the tasks above, EXCEPT if they can recruit another unit in that chapter)
+	- Attack or counterattack
+	- Use staves
+	- Summon
+	- Rescue or carry drafted units
+	- Open doors or chests
 - NPC units may do as they please without penalty.
 - Use of the Enemy Control Glitch is NOT allowed.
 - Save states and emulator speedup are entirely banned.
