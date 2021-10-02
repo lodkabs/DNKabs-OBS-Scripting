@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Kabs_Bot</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {{ turbo() }}
+    </head>
+    <body>
+        {% include "kabs_bot_reaction.html" %}
+        {% block content %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,10 @@
+<div id="pic" class="parent">
+    <img class="kabsbot" src="static/images/KabsBot/kabs_bot_{{ reaction }}.gif" />
+    {% if coffee %}
+    <img class="coffee" src="static/images/KabsBot/coffee_mug_slide.gif?t={{ nowtime }}" />
+    {% endif %}
+    {% if speaking %}
+    <img class="speech_box" src="static/images/KabsBot/speech_box.png" />
+    <div class="speech"><p>{{ text_1 }}<br>{{ text_2 }}</p></div>
+    {% endif %}
+</div>
