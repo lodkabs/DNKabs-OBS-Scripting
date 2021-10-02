@@ -1,0 +1,59 @@
+Fire Emblem: The Sacred Stones
+Community drafted, soul-linked race
+
+Drafting:
+- Eirika, Ephraim, Orson, Tethys and Myrrh are free for all to use.
+- We are all using the same team and route (picked by the community)
+
+Gameplay:
+- The game will be played on Ephraim Normal Mode
+- We are soul linking i.e. If a unit dies we all bench them (at the end of the current chapter)
+- If a lord dies, the player losing the lord must restart the chapter (but any benched units remain benched)
+- Undrafted units are allowed to:
+	- Recruit characters
+	- Rescue undrafted units and NPCs
+	- Trade
+	- Use items
+	- Visit vendors, armories and villages
+	- Enter combat without attacking (meatshielding)
+	- Sustain status (and enter combat if berserked)
+	- Dig up items in the desert
+- Undrafted units are NOT allowed to:
+	- Be deployed from the preps menu (to do any of the tasks above, EXCEPT if they can recruit another unit in that chapter)
+	- Attack or counterattack
+	- Use staves
+	- Summon
+	- Rescue or carry drafted units
+	- Open doors or chests
+- NPC units may do as they please without penalty.
+- Use of the Enemy Control Glitch is NOT allowed.
+- Save states and emulator speedup are entirely banned.
+ 
+Exceptions:
+- Seth is free for all to use until the end of Chapter 4.
+- Innes is free for all to use in Chapter 15
+
+Points:
+	Gains:
+	+5 points for recruiting a draft character
+	+15 points for a chapter clear (no points for skirmishes/tower)
+	+50 points for clearing the game first
+
+	Losses:
+	-5 points for a draft character dying
+	-5 points for each undrafted unit used, per chapter (exceptions in rules)
+	-10 points for using Seth, per chapter (exceptions in rules)
+	-10 points for lord dying and having to reset (once per chapter)
+
+
+The team voted for by the community (in appearance order):
+01: Franz    - Chapter 1
+02: Ross     - Chapter 2
+03: Neimi    - Chapter 3 
+04: Colm     - Chapter 3
+05: Lute     - Chapter 4
+06: Tana     - Chapter 9
+07: Amelia   - Chapter 9
+08: Cormag   - Chapter 10
+09: L'Archel - Chapter 11
+10: Knoll    - Chapter 15
