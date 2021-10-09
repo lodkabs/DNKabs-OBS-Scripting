@@ -156,7 +156,7 @@ async def charity(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("This month we are supporting Project HOPE! Check them out and !donate if you can: https://www.projecthope.org/ ShowOfHands")
+        await ctx.send("This month we are supporting Against Breast Cancer! Check them out and !donate if you can: https://www.againstbreastcancer.org.uk/ ShowOfHands")
 
 
 @bot.command(name="donate")
@@ -167,7 +167,7 @@ async def donate(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Donate to Project HOPE here! https://streamlabscharity.com/@dnkabs/september-2021-fundraising dnkabsHeart")
+        await ctx.send("Donate to Against Breast Cancer here! https://donate.tiltify.com/@dnkabs/october-2021-fundraising/ dnkabsHeart")
 
 
 @bot.command(name="lurk")
