@@ -43,26 +43,28 @@ else:
 
 ###### Database handling #######
 
-if kabs_stream:
-    try:
-        db = psycopg2.connect(
-                database=os.environ['KABSBOT_DB_NAME'],
-                user=os.environ['KABSBOT_DB_USER'],
-                password=os.environ['KABSBOT_DB_PASSWORD'],
-                host=os.environ['KABSBOT_DB_HOST'],
-                port=os.environ['KABSBOT_DB_PORT']
-        )
-    except:
-        print("Could not connect to database!")
-        db = None
-    else:
-        print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
-    finally:
-        pass
+try:
+    db = psycopg2.connect(
+            database=os.environ['KABSBOT_DB_NAME'],
+            user=os.environ['KABSBOT_DB_USER'],
+            password=os.environ['KABSBOT_DB_PASSWORD'],
+            host=os.environ['KABSBOT_DB_HOST'],
+            port=os.environ['KABSBOT_DB_PORT']
+    )
+    cur = db.cursor()
+except:
+    print("Could not connect to database!")
+    db = None
+    cur = None
+else:
+    print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
+finally:
+    pass
 
 def keyboardInterruptHandler(signal, frame):
     print(f"\nKeyboardInterrupt (ID: {signal}) has been caught.\n")
     if kabs_stream and db:
+        cur.close()
         db.close()
         print(f"Disconnected from {os.environ['KABSBOT_DB_NAME']} database.\n")
     exit(0)
@@ -73,16 +75,13 @@ def send_to_db(reaction, speech):
     global kabs_stream
 
     if kabs_stream:
-        global db
+        global db, cur
 
         sql = f"""INSERT INTO reactions (timestamp, reaction, speech, shown)
                   VALUES ('{datetime.datetime.now()}', '{reaction}', '{speech}', False);"""
 
-        cur = db.cursor()
         cur.execute(sql)
         db.commit()
-
-
 
 ###### Event handling ######
 
@@ -148,26 +147,48 @@ async def event_message(ctx):
 
 ###### Commands ######
 
-@bot.command(name="charity")
-async def charity(ctx):
+@bot.command(name="mod")
+async def mod(ctx):
     global is_command
     global kabs_stream
 
     if kabs_stream:
         is_command = True
 
-        await ctx.send("This month we are supporting Against Breast Cancer! Check them out and !donate if you can: https://www.againstbreastcancer.org.uk/ ShowOfHands")
+        await ctx.send("We're playing an FE8 mod that GrowlTrap made! Check in out: https://bit.ly/3JiXlML")
 
 
-@bot.command(name="donate")
-async def donate(ctx):
+# @bot.command(name="charity")
+# async def charity(ctx):
+#     global is_command
+#     global kabs_stream
+#
+#     if kabs_stream:
+#         is_command = True
+#
+#         await ctx.send("This month we are supporting Mind! Check them out and !donate if you can: https://www.mind.org.uk/ TakeNRG")
+#
+#
+# @bot.command(name="donate")
+# async def donate(ctx):
+#     global is_command
+#     global kabs_stream
+#
+#     if kabs_stream:
+#         is_command = True
+#
+#         await ctx.send("Donate to Mind here! https://donate.tiltify.com/@dnkabs/november-2021-fundraising Gimme5")
+
+
+@bot.command(name="morse")
+async def morse(ctx):
     global is_command
     global kabs_stream
 
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Donate to Against Breast Cancer here! https://donate.tiltify.com/@dnkabs/october-2021-fundraising/ dnkabsHeart")
+        await ctx.send("WhoIsDoopu made a game, check it out: https://oliverknight.itch.io/morse")
 
 
 @bot.command(name="lurk")
@@ -240,7 +261,6 @@ async def so(ctx):
             send_to_db("shoutout", f"Go follow\n{username}!")
 
 
-
 @bot.command(name="github")
 async def github(ctx):
     global is_command
@@ -271,7 +291,6 @@ async def hug(ctx):
             await ctx.send(resp_line)
             await asyncio.sleep(2)
         send_to_db("notice", f"{username} <3\n{ctx.author.name} <3")
-
 
 
 @bot.command(name="bop")
@@ -350,6 +369,14 @@ async def hakurei(ctx):
     await ctx.send("Interested in competitive Touhou? Check out the Hakurei League! https://www.twitch.tv/hakureileague")
 
 
+@bot.command(name="thisisfine")
+async def thisisfine(ctx):
+    global is_command
+
+    is_command = True
+    await ctx.send("CurseLit RalpherZ THIS IS FINE CurseLit")
+
+
 ###### Other functions ######
 
 def send_greeting(name):
@@ -375,6 +402,57 @@ def rand_resp(resp_list, author):
             replaced_text[count] = replaced_text[count].replace("{STREAMER}", f"@{streamer_name}")
 
     return replaced_text
+
+
+##### Custom commands #####
+
+def commands_db_get(command="ALL"):
+    global db, cur
+
+    if command == "ALL":
+        sql = "SELECT command, response FROM commands WHERE active=True"
+    else:
+        sql = f"SELECT * FROM commands WHERE command='{command}' AND active=True"
+
+    cur.execute(sql)
+    return cur.fetchall()
+
+def commands_db_insert(in_type, cust_command, message, created_by):
+    global db, cur
+    global streamer_name, preset_commands
+
+    command = cust_command.strip('!')
+
+    if in_type == 'add':
+        sql = f"""INSERT INTO commands (command, response, channel, created_by, active)
+                  VALUES ('{command}', '{message}', '{streamer_name.lower()}', {created_by}, True);"""
+        preset_commands.append(command)
+    elif in_type == 'edit':
+        sql = f"""UPDATE commands SET response = '{message}'
+                  WHERE command='{command}' AND channel='{streamer_name.lower()}' AND active=True;"""
+    elif in_type == 'delete':
+        sql = f"""UPDATE commands SET active = False
+                  WHERE command='{command}' AND channel='{streamer_name.lower()}' AND active=True;"""
+        preset_commands.remove(command)
+
+    cur.execute(sql)
+    db.commit()
+
+
+# @bot.command(name="custom")
+# async def custom(ctx):
+#     global is_command, preset_commands
+#     is_command = True
+#
+#     msg_list = ctx.content.split()
+#
+#     await ctx.send(preset_commands)
+
+# Ensure this part stays at the bottom of the script!
+preset_commands = []
+for key, value in list(locals().items()):
+    if isinstance(value, commands.core.Command):
+        preset_commands.append(key)
 
 
 

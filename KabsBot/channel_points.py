@@ -54,6 +54,10 @@ def callback_subscription(uuid: UUID, data: dict) -> None:
     print('got callback for UUID ' + str(uuid))
     pprint(data)
 
+    display_name = data['display_name']
+    send_to_db('star', f'Thank you for the sub\n{display_name}!')
+
+
 def callback_bits(uuid: UUID, data: dict) -> None:
     print('got callback for UUID ' + str(uuid))
     pprint(data)
@@ -92,4 +96,3 @@ pubsub.stop()
 if db:
     db.close()
     print(f"Disconnected from {os.environ['KABSBOT_DB_NAME']} database.\n")
-

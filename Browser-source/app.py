@@ -19,8 +19,9 @@ coffee = False
 nowtime = "0"
 silent_time = 0
 silence_filler = [
-        ('greeting', 'Check out the !charity', 'we are supporting'),
-        ('notice', 'If you are able to,', 'please !donate'),
+        #('greeting', 'Check out the !charity', 'we are supporting'),
+        #('notice', 'If you are able to,', 'please !donate'),
+        #('star', 'Check out the !prize', 'you could win!'),
         ('greeting', 'I like getting', 'a !hug'),
         ('greeting', 'I like giving a !hug', 'to others as well'),
         ('unlurk', 'We can hangout and', '!lurk together'),
@@ -29,7 +30,9 @@ silence_filler = [
         ('greeting', 'I hope everyone', 'is doing well~'),
         ('notice', 'I am, in fact,', 'a !plushie'),
         ('greeting', 'I like to keep', 'a !bopcount...'),
-        ('greeting', 'Please let me know', 'when a !bop happens~')
+        ('greeting', 'Please let me know', 'when a !bop happens~'),
+        #('unlurk', 'Check out the !mod', 'being played'),
+        ('greeting', 'Check out', '!morse')
         ]
 silent_place = -1
 
@@ -108,7 +111,7 @@ def inject_load():
         silent_time = 0
     else:
         responses_from_db = bot_speak()
-        if speaking or silent_time < 15:
+        if speaking or silent_time < 300:
             speaking = False
             reaction = 'neutral'
             silent_time += 5
