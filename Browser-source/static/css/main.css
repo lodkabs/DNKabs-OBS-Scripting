@@ -46,3 +46,24 @@
     font-family: "Lucida Console";
     font-size: 28px;
 }
+
+@font-face {
+    font-family: "GBA-FE-font";
+    src: url("../fonts/gba-fe-dialogue.ttf");
+}
+.txt-rotate {
+    position: absolute;
+    left: 35px;
+    top: 40px;
+    font-family: "GBA-FE-font";
+    font-size: 60px;
+}
+
+.rule_box {
+
+}
+.txt_arrow {
+    position: absolute;
+    left: 1240px;
+    top: 40px;
+}

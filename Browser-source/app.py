@@ -87,6 +87,10 @@ def record_shown(record):
 def index():
     return render_template('index.html')
 
+@app.route('/fe7_magiconly_rules')
+def rules():
+    return render_template('FE7_magiconly_rules.html')
+
 @app.context_processor
 def inject_load():
     global reaction, speaking, coffee, nowtime
