@@ -15,7 +15,8 @@ notice_responses = [
         "Please {NAME}, tell me more about me TPFufun",
         "I'm so glad {STREAMER} let me hangout with you {NAME} GivePLZ",
         "I can't read {NAME}, but let's just say we're friends VirtualHug",
-        "Right back at ya {NAME} FBPass ...what are we talking about?"
+        "Right back at ya {NAME} FBPass ...what are we talking about?",
+        "...hm? Sorry, I wasn't paying attention, are you okay over there {NAME}?"
         ]
 
 bye_responses = [
