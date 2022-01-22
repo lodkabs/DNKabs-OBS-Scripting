@@ -63,7 +63,7 @@ finally:
 
 def keyboardInterruptHandler(signal, frame):
     print(f"\nKeyboardInterrupt (ID: {signal}) has been caught.\n")
-    if kabs_stream and db:
+    if db and cur:
         cur.close()
         db.close()
         print(f"Disconnected from {os.environ['KABSBOT_DB_NAME']} database.\n")
@@ -72,11 +72,9 @@ def keyboardInterruptHandler(signal, frame):
 signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
 def send_to_db(reaction, speech):
-    global kabs_stream
+    global db, cur
 
-    if kabs_stream:
-        global db, cur
-
+    if db:
         sql = f"""INSERT INTO reactions (timestamp, reaction, speech, shown)
                   VALUES ('{datetime.datetime.now()}', '{reaction}', '{speech}', False);"""
 
@@ -155,7 +153,7 @@ async def mod(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("We're playing an FE8 mod that GrowlTrap made! Check in out: https://bit.ly/3JiXlML")
+        await ctx.send("Check out the Celeste 2020 Spring collab mod here: https://gamebanana.com/mods/150813")
 
 
 # @bot.command(name="charity")
