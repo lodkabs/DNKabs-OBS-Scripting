@@ -10,7 +10,7 @@ import datetime
 import asyncio
 
 from twitchio.ext import commands
-from twitch import TwitchClient
+from twitchAPI.twitch import Twitch
 
 import responses
 
@@ -29,8 +29,8 @@ bot = commands.Bot(
     client_secret=os.environ['CLIENT_SECRET']
 )
 
-# Docs: https://python-twitch-client.readthedocs.io/en/latest/index.html
-client = TwitchClient(client_id=os.environ['CLIENT_ID'], oauth_token=os.environ['ACCESS_TOKEN'])
+# Docs: https://pytwitchapi.readthedocs.io/en/latest/index.html
+twitch = Twitch(os.environ['CLIENT_ID'], os.environ['CLIENT_SECRET'])
 
 # Global control variables
 kabs_stream = (streamer_name.lower() == 'dnkabs')
@@ -246,17 +246,21 @@ async def so(ctx):
             if username.lower() == 'robertskmiles':
                 response = "AI Safety is important! (and really interesting) Check it out: https://www.youtube.com/c/RobertMilesAI"
             else:
-                user = client.users.translate_usernames_to_ids([username])
-                if user:
-                    response = f"GivePLZ Go give {username} a <3 at https://www.twitch.tv/{username}"
-                    user_id = int(user[0]['id'])
-                    user_info = client.channels.get_by_id(user_id)
+                channel_list = twitch.search_channels(query=username)
+                channel_info = []
+                for c in channel_list['data']:
+                    if c['broadcaster_login'].lower() == username.lower():
+                        channel_info = c
+                        break
 
-                    if 'game' in user_info and user_info['game']:
-                        response += f" | I saw them playing {user_info['game']} earlier TakeNRG"
+                if channel_info:
+                    response = f"GivePLZ Go give {channel_info['display_name']} a <3 at https://www.twitch.tv/{channel_info['display_name']}"
+
+                    if 'game_name' in channel_info and channel_info['game_name']:
+                        response += f" | I saw them playing {channel_info['game_name']} earlier TakeNRG"
 
             await ctx.send(response)
-            send_to_db("shoutout", f"Go follow\n{username}!")
+            send_to_db("shoutout", f"Go follow\n{channel_info['display_name']}!")
 
 
 @bot.command(name="github")
