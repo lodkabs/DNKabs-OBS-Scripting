@@ -371,6 +371,28 @@ async def hakurei(ctx):
     await ctx.send("Interested in competitive Touhou? Check out the Hakurei League! https://www.twitch.tv/hakureileague")
 
 
+@bot.command(name="truehit")
+async def truehit(ctx):
+    global is_command
+
+    is_command = True
+
+    msg_list = ctx.content.split()
+
+    try:
+        x = int(msg_list[1])
+    except ValueError:
+        pass
+    else:
+        if x in range(0,101):
+            y = 2*pow(x, 2) + x
+
+            if x > 50:
+                y -= 4*pow(x,2) - 398*x + 9900
+
+            await ctx.send(f"A display hit of {x} in 2RN has a True Hit of {y/100}% VoHiYo")
+
+
 @bot.command(name="thisisfine")
 async def thisisfine(ctx):
     global is_command
