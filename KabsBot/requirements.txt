@@ -1,5 +1,6 @@
 psycopg2==2.8.6
 python_twitch_client==0.7.1
+requests==2.25.1
 twitch==0.1
 twitchAPI==2.5.1
 twitchio==1.2.3

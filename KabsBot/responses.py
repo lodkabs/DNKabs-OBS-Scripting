@@ -5,7 +5,8 @@ greet_responses = [
         "Eeey, it's {NAME}, nice B)",
         "{NAME}! I was hoping you'd make it <3",
         "Hello {NAME}, how are you functioning today? VoHiYo",
-        "A wild {NAME} has appeared! TehePelo"
+        "A wild {NAME} has appeared! TehePelo",
+        "Ah, I get to chill out with {NAME} today, fantastic GlitchCat"
         ]
 
 notice_responses = [
@@ -81,5 +82,16 @@ re_unlurk_responses = [
 bop_responses = [
         "Oh dear {STREAMER}... TearGlove",
         "You got this {STREAMER}, I believe! TehePelo",
-        "I'm not going to lie {STREAMER}, that was a bit funny TPFufun"
+        "I'm not going to lie {STREAMER}, that was a bit funny TPFufun",
+        "AAAHAHAHAHA-*cough* That was a good attempt {STREAMER} GlitchCat",
+        "It was inevitable, there was no other way {STREAMER} DarkKnight",
+        "Why so serious, {STREAMER}? WhySoSerious",
+        "You clearly haven't taken your training seriously {STREAMER}! RyuChamp",
+        "Get back to basics {STREAMER}! FamilyMan",
+        "Alright {STREAMER}, let's avoid doing that again BOP",
+        "You're almost there {STREAMER}, you just need some readjustment VoHiYo",
+        "Thank you for being so considerate {STREAMER}, I actually do enjoy counting BegWan",
+        "Is chat distracting you {STREAMER}? Stop causing problems everyone! PunOko",
+        "Did you know?: {BOPMATH}",
+        "Did you know?: {BOPTRIVIA}"
         ]

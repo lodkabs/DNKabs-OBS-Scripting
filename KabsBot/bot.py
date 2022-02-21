@@ -8,6 +8,7 @@ import psycopg2
 import signal
 import datetime
 import asyncio
+import requests
 
 from twitchio.ext import commands
 from twitchAPI.twitch import Twitch
@@ -181,12 +182,9 @@ async def mod(ctx):
 @bot.command(name="morse")
 async def morse(ctx):
     global is_command
-    global kabs_stream
+    is_command = True
 
-    if kabs_stream:
-        is_command = True
-
-        await ctx.send("WhoIsDoopu made a game, check it out: https://oliverknight.itch.io/morse")
+    await ctx.send("WhoIsDoopu made a game, check it out: https://oliverknight.itch.io/morse")
 
 
 @bot.command(name="lurk")
@@ -320,6 +318,23 @@ async def unbop(ctx):
 
         await ctx.send(f"I was misinformed! The bop count is now at {bop_count}")
 
+@bot.command(name="bopset")
+async def bopset(ctx):
+    global is_command, bop_count
+
+    if ctx.author.is_mod:
+        is_command = True
+
+        msg_list = ctx.content.split()
+
+        try:
+            b = int(msg_list[1])
+        except ValueError:
+            pass
+        else:
+            bop_count = b
+            await ctx.send(f"I have readjusted! The bop count is now at {bop_count}")
+
 @bot.command(name="bopcount")
 async def bopcount(ctx):
     global is_command, bop_count
@@ -409,6 +424,40 @@ def send_greeting(name):
     return greet_response
 
 
+def replace_resp_words(text_replace, author):
+    global streamer_name, bop_count
+
+    text_replace = text_replace.replace("{NAME}", f"@{author}")
+    text_replace = text_replace.replace("{STREAMER}", f"@{streamer_name}")
+
+    link = f"http://numbersapi.com/{bop_count}/"
+    if "{BOPMATH}" in text_replace:
+        link += "math"
+        try:
+            f = requests.get(link)
+        except:
+            bop_math = f"{bop_count} is...kind of a big number, I'm not going to lie :thinking:"
+        else:
+            bop_math = f.text
+            print(bop_math)
+        finally:
+            text_replace = text_replace.replace("{BOPMATH}", f"{bop_math}")
+
+    if "{BOPTRIVIA}" in text_replace:
+        link += "trivia"
+        try:
+            f = requests.get(link)
+        except:
+            bop_trivia = f"{bop_count} is...kind of a big number, I'm not going to lie :woozy_face:"
+        else:
+            bop_trivia = f.text
+            print(bop_trivia)
+        finally:
+            text_replace = text_replace.replace("{BOPTRIVIA}", f"{bop_trivia}")
+
+    return text_replace
+
+
 def rand_resp(resp_list, author):
     global streamer_name
 
@@ -417,8 +466,7 @@ def rand_resp(resp_list, author):
     text = resp_list[randnum]
 
     if isinstance(text, str):
-        replaced_text = text.replace("{NAME}", f"@{author}")
-        replaced_text = replaced_text.replace("{STREAMER}", f"@{streamer_name}")
+        replaced_text = replace_resp_words(text, author)
     elif isinstance(text, list):
         replaced_text = list()
         for count, line in enumerate(text):
