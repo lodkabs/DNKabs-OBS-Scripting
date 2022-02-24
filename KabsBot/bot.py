@@ -43,24 +43,28 @@ else:
     print("Greeting not disabled")
 
 ###### Database handling #######
-
-try:
-    db = psycopg2.connect(
-            database=os.environ['KABSBOT_DB_NAME'],
-            user=os.environ['KABSBOT_DB_USER'],
-            password=os.environ['KABSBOT_DB_PASSWORD'],
-            host=os.environ['KABSBOT_DB_HOST'],
-            port=os.environ['KABSBOT_DB_PORT']
-    )
-    cur = db.cursor()
-except:
-    print("Could not connect to database!")
+if kabs_stream:
+    try:
+        db = psycopg2.connect(
+                database=os.environ['KABSBOT_DB_NAME'],
+                user=os.environ['KABSBOT_DB_USER'],
+                password=os.environ['KABSBOT_DB_PASSWORD'],
+                host=os.environ['KABSBOT_DB_HOST'],
+                port=os.environ['KABSBOT_DB_PORT']
+        )
+        cur = db.cursor()
+    except:
+        print("Could not connect to database!")
+        db = None
+        cur = None
+    else:
+        print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
+    finally:
+        pass
+else:
+    print("Not a DNKabs stream")
     db = None
     cur = None
-else:
-    print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
-finally:
-    pass
 
 def keyboardInterruptHandler(signal, frame):
     print(f"\nKeyboardInterrupt (ID: {signal}) has been caught.\n")
