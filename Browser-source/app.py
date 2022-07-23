@@ -33,7 +33,8 @@ silence_filler = [
         ('greeting', 'Please let me know', 'when a !bop happens~'),
         #('unlurk', 'Check out the !mod', 'being played'),
         ('github', 'What is that', '!truehit again?'),
-        ('greeting', 'Check out', '!morse')
+        ('greeting', 'Check out', '!morse'),
+        ('notice', 'I can convert', 'the !temperature')
         ]
 silent_place = -1
 
@@ -49,8 +50,9 @@ try:
             host=os.environ['KABSBOT_DB_HOST'],
             port=os.environ['KABSBOT_DB_PORT']
     )
-except:
+except Exception as e:
     print("Could not connect to database!")
+    print(str(e))
     db = None
 else:
     print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")

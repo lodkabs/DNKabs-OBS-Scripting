@@ -53,8 +53,9 @@ if kabs_stream:
                 port=os.environ['KABSBOT_DB_PORT']
         )
         cur = db.cursor()
-    except:
+    except Exception as e:
         print("Could not connect to database!")
+        print(str(e))
         db = None
         cur = None
     else:
@@ -158,7 +159,43 @@ async def mod(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Check out the Celeste 2020 Spring collab mod here: https://gamebanana.com/mods/150813")
+        #await ctx.send("Check out the Celeste 2020 Spring collab mod here: https://gamebanana.com/mods/150813")
+        await ctx.send("Check out the Fire Emblem - Sword of Heaven Earth mod here: https://bit.ly/3yA83vs")
+
+
+@bot.command(name="temperature")
+async def morse(ctx):
+    global is_command
+    is_command = True
+
+    msg_list = ctx.content.split()
+    temp = msg_list[1]
+    temp_type = ""
+
+    try:
+        x = float(temp)
+    except ValueError:
+        x = temp[:-1]
+        temp_type = temp[-1].upper()
+
+    try:
+        y = float(x)
+    except ValueError:
+        pass
+    else:
+        if temp_type in ["C", "F", ""]:
+            response = ""
+            C_rsp = f"{str(y)}C = {round((y * 9 / 5) + 32, 2)}F"
+            F_rsp = f"{str(y)}F = {round((y - 32) * 5 / 9, 2)}C"
+
+            if temp_type == 'C':
+                response = C_rsp
+            elif temp_type == 'F':
+                response = F_rsp
+            else:
+                response = f"{C_rsp}, {F_rsp}"
+
+            await ctx.send(response)
 
 
 # @bot.command(name="charity")

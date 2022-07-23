@@ -231,4 +231,3 @@ def script_unload(settings):
     obs.obs_data_release(speech_data)
     obs.obs_sceneitem_release(box_scene)
     obs.obs_sceneitem_release(coffee_scene)
-

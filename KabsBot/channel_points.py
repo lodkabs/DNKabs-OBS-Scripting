@@ -21,8 +21,9 @@ try:
             host=os.environ['KABSBOT_DB_HOST'],
             port=os.environ['KABSBOT_DB_PORT']
     )
-except:
+except Exception as e:
     print("Could not connect to database!")
+    print(str(e))
     db = None
 else:
     print(f"Connected to {os.environ['KABSBOT_DB_NAME']} database.")
