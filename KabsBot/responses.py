@@ -71,7 +71,7 @@ re_lurk_responses = [
 unlurk_responses = [
         "{NAME} has returned! :O",
         "{NAME}, you're back, I missed you >(",
-        "Thank goodness your back {NAME}, it was getting pretty wild over here O_o"
+        "Thank goodness you're back {NAME}, it was getting pretty wild over here O_o"
         ]
 
 re_unlurk_responses = [
