@@ -28,6 +28,7 @@ silence_filler = [
         ('greeting', 'Let me know when', 'you want to !unlurk'),
         ('github', 'I live on', '!github'),
         ('greeting', 'I hope everyone', 'is doing well~'),
+        ('greeting', 'We finally have a', '!discord server'),
         ('notice', 'I am, in fact,', 'a !plushie'),
         ('greeting', 'I like to keep', 'a !bopcount...'),
         ('greeting', 'Please let me know', 'when a !bop happens~'),
