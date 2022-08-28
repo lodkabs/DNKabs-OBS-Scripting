@@ -151,6 +151,25 @@ async def event_message(ctx):
 
 ###### Commands ######
 
+@bot.command(name="discord")
+async def discord(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("Grab a drink at the Kabs_Bot Café: https://discord.gg/actPVgqH3R")
+
+
+@bot.command(name="obsidian")
+async def obsidian(ctx):
+    global is_command
+    global kabs_stream
+
+    if kabs_stream:
+        is_command = True
+
+        await ctx.send("We're playing Obsidian Prince today, check it out: https://store.steampowered.com/app/1373260/Obsidian_Prince/")
+
+
 @bot.command(name="mod")
 async def mod(ctx):
     global is_command
