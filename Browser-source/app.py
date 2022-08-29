@@ -35,7 +35,8 @@ silence_filler = [
         #('unlurk', 'Check out the !mod', 'being played'),
         ('github', 'What is that', '!truehit again?'),
         ('greeting', 'Check out', '!morse'),
-        ('notice', 'I can convert', 'the !temperature')
+        ('notice', 'I can convert', 'the !temperature'),
+        ('greeting', 'Check out', '!duality')
         ]
 silent_place = -1
 

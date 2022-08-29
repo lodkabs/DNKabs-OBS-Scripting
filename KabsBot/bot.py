@@ -246,6 +246,13 @@ async def morse(ctx):
 
     await ctx.send("WhoIsDoopu made a game, check it out: https://oliverknight.itch.io/morse")
 
+@bot.command(name="duality")
+async def duality(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("WhoIsDoopu voice acted in a game, check it out: https://store.steampowered.com/app/1938040/Royal_Duality/")
+
 
 @bot.command(name="lurk")
 async def lurk(ctx):
