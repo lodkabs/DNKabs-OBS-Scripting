@@ -158,6 +158,12 @@ async def discord(ctx):
 
     await ctx.send("Grab a drink at the Kabs_Bot Café: https://discord.gg/actPVgqH3R")
 
+@bot.command(name="poll")
+async def poll(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("Charity FE7 soul-linked draft race! Decide which units we can use here: https://strawpoll.com/polls/7rnzGPdPagO")
 
 @bot.command(name="obsidian")
 async def obsidian(ctx):
@@ -178,8 +184,8 @@ async def mod(ctx):
     if kabs_stream:
         is_command = True
 
-        #await ctx.send("Check out the Celeste 2020 Spring collab mod here: https://gamebanana.com/mods/150813")
-        await ctx.send("Check out the Fire Emblem - Sword of Heaven Earth mod here: https://bit.ly/3yA83vs")
+        await ctx.send("Check out the Celeste 2020 Spring collab mod here: https://gamebanana.com/mods/150813")
+        #await ctx.send("Check out the Fire Emblem - Sword of Heaven Earth mod here: https://bit.ly/3yA83vs")
 
 
 @bot.command(name="temperature")
