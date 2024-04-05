@@ -21,7 +21,7 @@ silent_time = 0
 silence_filler = [
         #('greeting', 'Check out the !charity', 'we are supporting'),
         #('notice', 'If you are able to,', 'please !donate'),
-        #('star', 'Check out the !prize', 'you could win!'),
+        #('star', 'New !event,', 'this is exciting!'),
         ('greeting', 'I like getting', 'a !hug'),
         ('greeting', 'I like giving a !hug', 'to others as well'),
         ('unlurk', 'We can hangout and', '!lurk together'),
@@ -32,11 +32,12 @@ silence_filler = [
         ('notice', 'I am, in fact,', 'a !plushie'),
         ('greeting', 'I like to keep', 'a !bopcount...'),
         ('greeting', 'Please let me know', 'when a !bop happens~'),
-        #('unlurk', 'Check out the !mod', 'being played'),
+        ('github', 'Wait we have a', '!podcast now?'),
+        ('unlurk', 'Check out the !mod', 'being played'),
+        ('unlurk', 'We have !controller', 'display now!'),
         ('github', 'What is that', '!truehit again?'),
-        ('greeting', 'Check out', '!morse'),
+        #('greeting', 'Check out', '!morse'),
         ('notice', 'I can convert', 'the !temperature'),
-        ('greeting', 'Check out', '!duality')
         ]
 silent_place = -1
 
@@ -92,9 +93,17 @@ def record_shown(record):
 def index():
     return render_template('index.html')
 
-@app.route('/fe7_magiconly_rules')
+@app.route('/fe_rules')
 def rules():
-    return render_template('FE7_magiconly_rules.html')
+    return render_template('FE_rules.html')
+
+@app.route('/main_game')
+def main_game():
+    return render_template('main_game.html')
+
+@app.route('/side_game')
+def side_game():
+    return render_template('side_game.html')
 
 @app.context_processor
 def inject_load():

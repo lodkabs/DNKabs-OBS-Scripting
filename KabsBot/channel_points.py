@@ -76,6 +76,7 @@ token, refresh_token = auth.authenticate()
 twitch.set_user_authentication(token, target_scope, refresh_token)
 
 user_id = twitch.get_users(logins=['DNKabs'])['data'][0]['id']
+print(f'user_id={user_id} | type = {type(user_id)}')
 
 # starting up PubSub
 pubsub = PubSub(twitch)

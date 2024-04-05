@@ -129,10 +129,12 @@ async def event_message(ctx):
             if content_set.intersection(bye_words):
                 await ctx.channel.send(rand_resp(responses.bye_responses, ctx.author.name))
 
-            else:
+            elif ctx.author.name not in noticed_users:
                 await ctx.channel.send(rand_resp(responses.notice_responses, ctx.author.name))
 
-                greeted_users.append(ctx.author.name)
+                noticed_users.append(ctx.author.name)
+                if ctx.author.name not in greeted_users:
+                    greeted_users.append(ctx.author.name)
 
                 send_to_db("notice", f"Happy to see you\n{ctx.author.name}~")
 
@@ -151,30 +153,15 @@ async def event_message(ctx):
 
 ###### Commands ######
 
-@bot.command(name="discord")
-async def discord(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("Grab a drink at the Kabs_Bot Café: https://discord.gg/actPVgqH3R")
-
-@bot.command(name="poll")
-async def poll(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("Charity FE7 soul-linked draft race! Decide which units we can use here: https://strawpoll.com/polls/7rnzGPdPagO")
-
-@bot.command(name="obsidian")
-async def obsidian(ctx):
-    global is_command
-    global kabs_stream
-
-    if kabs_stream:
-        is_command = True
-
-        await ctx.send("We're playing Obsidian Prince today, check it out: https://store.steampowered.com/app/1373260/Obsidian_Prince/")
-
+# @bot.command(name="cc")
+# async def cc(ctx):
+#     global is_command
+#     global kabs_stream
+#
+#     if kabs_stream:
+#         is_command = True
+#
+#         await ctx.send("Take part in the crowd control!: https://interact.crowdcontrol.live/#/twitch/67470177")
 
 @bot.command(name="mod")
 async def mod(ctx):
@@ -184,12 +171,111 @@ async def mod(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Check out the Celeste 2020 Spring collab mod here: https://gamebanana.com/mods/150813")
-        #await ctx.send("Check out the Fire Emblem - Sword of Heaven Earth mod here: https://bit.ly/3yA83vs")
+        await ctx.send("Check out the Celeste Strawberry Jam Collab mod here: https://gamebanana.com/mods/424541")
+        #await ctx.send("Try randomising your FE mod: https://github.com/lushen124/Universal-FE-Randomizer")
 
+@bot.command(name="controller")
+async def controller(ctx):
+    global is_command
+    global kabs_stream
+
+    if kabs_stream:
+        is_command = True
+
+        await ctx.send("Interested in the Controller Display?: https://thatsmytrunks.itch.io/controllerdisplay")
+
+@bot.command(name="podcast")
+async def podcast(ctx):
+    global is_command
+    global kabs_stream
+
+    if kabs_stream:
+        is_command = True
+
+        await ctx.send("Rathé and Kabs have started a podcast Indeterminate Reach! Find it on your favourite podcast app~")
+
+# @bot.command(name="rules")
+# async def rules(ctx):
+#     global is_command
+#     global kabs_stream
+#
+#     if kabs_stream:
+#         is_command = True
+#
+#         await ctx.send("We did a 2-vs-2 FE8 bingo...uhh, race thingie for a charity event, details here: https://pastebin.com/K17VWgF7")
+#
+# @bot.command(name="charity")
+# async def charity(ctx):
+#     global is_command
+#     global kabs_stream
+#
+#     if kabs_stream:
+#         is_command = True
+#
+#         await ctx.send("Check out SpecialEffect and !donate if you can: https://www.specialeffect.org.uk TakeNRG")
+#
+#
+# @bot.command(name="donate")
+# async def donate(ctx):
+#     global is_command
+#     global kabs_stream
+#
+#     if kabs_stream:
+#         is_command = True
+#
+#         await ctx.send("Donate to SpecialEffect here! https://tiltify.com/@dnkabs/dnkabs-2023-charity-event")
+
+@bot.command(name="dabble")
+async def dabble(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("Dabble World is a free platformer maker game by dobbsworks: https://dobbsworks.github.io/Games/DabbleWorlds/")
+
+@bot.command(name="discord")
+async def discord(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("Grab a drink at the Kabs_Bot Café: https://discord.gg/actPVgqH3R")
+
+@bot.command(name="side")
+async def side(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("Get your tactics gaming here! https://www.twitch.tv/sidewinder437")
+
+@bot.command(name="justin")
+async def justin(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("Get your Fire Emblem gaming here! https://www.twitch.tv/justinjamesmdlc")
+
+@bot.command(name="atharia")
+async def atharia(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("Get your Mass Effect content here! https://www.youtube.com/@paragonseven")
+
+@bot.command(name="morse")
+async def morse(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("WhoIsDoopu made a game, check it out: https://oliverknight.itch.io/morse")
+
+@bot.command(name="duality")
+async def duality(ctx):
+    global is_command
+    is_command = True
+
+    await ctx.send("WhoIsDoopu voice acted in a game, check it out: https://store.steampowered.com/app/1938040/Royal_Duality/")
 
 @bot.command(name="temperature")
-async def morse(ctx):
+async def temperature(ctx):
     global is_command
     is_command = True
 
@@ -221,43 +307,6 @@ async def morse(ctx):
                 response = f"{C_rsp}, {F_rsp}"
 
             await ctx.send(response)
-
-
-# @bot.command(name="charity")
-# async def charity(ctx):
-#     global is_command
-#     global kabs_stream
-#
-#     if kabs_stream:
-#         is_command = True
-#
-#         await ctx.send("This month we are supporting Mind! Check them out and !donate if you can: https://www.mind.org.uk/ TakeNRG")
-#
-#
-# @bot.command(name="donate")
-# async def donate(ctx):
-#     global is_command
-#     global kabs_stream
-#
-#     if kabs_stream:
-#         is_command = True
-#
-#         await ctx.send("Donate to Mind here! https://donate.tiltify.com/@dnkabs/november-2021-fundraising Gimme5")
-
-
-@bot.command(name="morse")
-async def morse(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("WhoIsDoopu made a game, check it out: https://oliverknight.itch.io/morse")
-
-@bot.command(name="duality")
-async def duality(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("WhoIsDoopu voice acted in a game, check it out: https://store.steampowered.com/app/1938040/Royal_Duality/")
 
 
 @bot.command(name="lurk")
@@ -316,6 +365,10 @@ async def so(ctx):
             username = msg_list[1].strip('@')
             if username.lower() == 'robertskmiles':
                 response = "AI Safety is important! (and really interesting) Check it out: https://www.youtube.com/c/RobertMilesAI"
+            elif username.lower() == 'atharia_':
+                response = "Mass Effect content and theory crafting, it's awesome: https://www.youtube.com/@paragonseven"
+            elif username.lower() == 'actuallizard':
+                response = "More of the FEmily on YouTube, check it out: https://www.youtube.com/@actuallizard"
             else:
                 channel_list = twitch.search_channels(query=username)
                 channel_info = []
@@ -426,7 +479,7 @@ async def plushie(ctx):
 
     is_command = True
 
-    await ctx.send("Come get an adorable plushie! (like me): https://www.sleepywaifu.com/ <3")
+    await ctx.send("Come get an adorable plushie! (like me): https://www.sleepywaifu.com <3")
 
 
 @bot.command(name="disablegreeting")
@@ -449,14 +502,6 @@ async def enablegreeting(ctx):
         disable_greeting = False
 
         await ctx.send("Ready to greet people :D")
-
-
-@bot.command(name="hakurei")
-async def hakurei(ctx):
-    global is_command
-
-    is_command = True
-    await ctx.send("Interested in competitive Touhou? Check out the Hakurei League! https://www.twitch.tv/hakureileague")
 
 
 @bot.command(name="truehit")
