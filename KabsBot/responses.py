@@ -79,7 +79,7 @@ re_unlurk_responses = [
         "I didn't realise you were lurking {NAME}, why didn't you tell me? :("
         ]
 
-bop_responses = [
+bonk_responses = [
         "Oh dear {STREAMER}... TearGlove",
         "You got this {STREAMER}, I believe! TehePelo",
         "I'm not going to lie {STREAMER}, that was a bit funny TPFufun",
@@ -88,10 +88,10 @@ bop_responses = [
         "Why so serious, {STREAMER}? WhySoSerious",
         "You clearly haven't taken your training seriously {STREAMER}! RyuChamp",
         "Get back to basics {STREAMER}! FamilyMan",
-        "Alright {STREAMER}, let's avoid doing that again BOP",
+        "Alright {STREAMER}, let's avoid doing that again BONK",
         "You're almost there {STREAMER}, you just need some readjustment VoHiYo",
         "Thank you for being so considerate {STREAMER}, I actually do enjoy counting BegWan",
         "Is chat distracting you {STREAMER}? Stop causing problems everyone! PunOko",
-        "Did you know?: {BOPMATH}",
-        "Did you know?: {BOPTRIVIA}"
+        "Did you know?: {BONKMATH}",
+        "Did you know?: {BONKTRIVIA}"
         ]

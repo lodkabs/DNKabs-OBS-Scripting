@@ -92,7 +92,7 @@ def send_to_db(reaction, speech):
 greeted_users = []
 noticed_users = []
 lurk_users = []
-bop_count = 0
+bonk_count = 0
 
 is_command = False
 
@@ -171,7 +171,7 @@ async def mod(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Check out the Celeste Strawberry Jam Collab mod here: https://gamebanana.com/mods/424541")
+        #await ctx.send("Check out the Celeste Strawberry Jam Collab mod here: https:/gamebanana.com/mods/424541")
         #await ctx.send("Try randomising your FE mod: https://github.com/lushen124/Universal-FE-Randomizer")
 
 @bot.command(name="controller")
@@ -419,34 +419,34 @@ async def hug(ctx):
         send_to_db("notice", f"{username} <3\n{ctx.author.name} <3")
 
 
-@bot.command(name="bop")
-async def bop(ctx):
-    global is_command, bop_count
+@bot.command(name="bonk")
+async def bonk(ctx):
+    global is_command, bonk_count
 
     is_command = True
-    bop_count += 1
+    bonk_count += 1
 
-    if bop_count == 1:
-        response = "I'm honoured to have witnessed my first bop TPcrunchyroll"
+    if bonk_count == 1:
+        response = "I'm honoured to have witnessed my first bonk TPcrunchyroll"
     else:
-        response = f"Bop number {bop_count}! " + rand_resp(responses.bop_responses, ctx.author.name)
+        response = f"Bonk number {bonk_count}! " + rand_resp(responses.bonk_responses, ctx.author.name)
 
     await ctx.send(response)
     send_to_db("reunlurk", f"Oh no!\nWe got this~")
 
-@bot.command(name="unbop")
-async def unbop(ctx):
-    global is_command, bop_count
+@bot.command(name="unbonk")
+async def unbonk(ctx):
+    global is_command, bonk_count
 
-    if ctx.author.is_mod and bop_count > 0:
+    if ctx.author.is_mod and bonk_count > 0:
         is_command = True
-        bop_count -= 1
+        bonk_count -= 1
 
-        await ctx.send(f"I was misinformed! The bop count is now at {bop_count}")
+        await ctx.send(f"I was misinformed! The bonk count is now at {bonk_count}")
 
-@bot.command(name="bopset")
-async def bopset(ctx):
-    global is_command, bop_count
+@bot.command(name="bonkset")
+async def bonkset(ctx):
+    global is_command, bonk_count
 
     if ctx.author.is_mod:
         is_command = True
@@ -458,19 +458,19 @@ async def bopset(ctx):
         except ValueError:
             pass
         else:
-            bop_count = b
-            await ctx.send(f"I have readjusted! The bop count is now at {bop_count}")
+            bonk_count = b
+            await ctx.send(f"I have readjusted! The bonk count is now at {bonk_count}")
 
-@bot.command(name="bopcount")
-async def bopcount(ctx):
-    global is_command, bop_count
+@bot.command(name="bonkcount")
+async def bonkcount(ctx):
+    global is_command, bonk_count
 
     is_command = True
 
-    if bop_count == 0:
-        await ctx.send("I have not been informed of any bops so far. Nice! HSWP")
+    if bonk_count == 0:
+        await ctx.send("I have not been informed of any bonks so far. Nice! HSWP")
     else:
-        await ctx.send(f"The bop count is currently at {bop_count}! ...is that a lot? GunRun")
+        await ctx.send(f"The bonk count is currently at {bonk_count}! ...is that a lot? GunRun")
 
 
 @bot.command(name="plushie")
@@ -543,35 +543,35 @@ def send_greeting(name):
 
 
 def replace_resp_words(text_replace, author):
-    global streamer_name, bop_count
+    global streamer_name, bonk_count
 
     text_replace = text_replace.replace("{NAME}", f"@{author}")
     text_replace = text_replace.replace("{STREAMER}", f"@{streamer_name}")
 
-    link = f"http://numbersapi.com/{bop_count}/"
-    if "{BOPMATH}" in text_replace:
+    link = f"http://numbersapi.com/{bonk_count}/"
+    if "{BONKMATH}" in text_replace:
         link += "math"
         try:
             f = requests.get(link)
         except:
-            bop_math = f"{bop_count} is...kind of a big number, I'm not going to lie :thinking:"
+            bonk_math = f"{bonk_count} is...kind of a big number, I'm not going to lie :thinking:"
         else:
-            bop_math = f.text
-            print(bop_math)
+            bonk_math = f.text
+            print(bonk_math)
         finally:
-            text_replace = text_replace.replace("{BOPMATH}", f"{bop_math}")
+            text_replace = text_replace.replace("{BONKMATH}", f"{bonk_math}")
 
-    if "{BOPTRIVIA}" in text_replace:
+    if "{BONKTRIVIA}" in text_replace:
         link += "trivia"
         try:
             f = requests.get(link)
         except:
-            bop_trivia = f"{bop_count} is...kind of a big number, I'm not going to lie :woozy_face:"
+            bonk_trivia = f"{bonk_count} is...kind of a big number, I'm not going to lie :woozy_face:"
         else:
-            bop_trivia = f.text
-            print(bop_trivia)
+            bonk_trivia = f.text
+            print(bonk_trivia)
         finally:
-            text_replace = text_replace.replace("{BOPTRIVIA}", f"{bop_trivia}")
+            text_replace = text_replace.replace("{BONKTRIVIA}", f"{bonk_trivia}")
 
     return text_replace
 
