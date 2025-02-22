@@ -30,13 +30,12 @@ silence_filler = [
         ('greeting', 'I hope everyone', 'is doing well~'),
         ('greeting', 'We finally have a', '!discord server'),
         ('notice', 'I am, in fact,', 'a !plushie'),
-        ('greeting', 'I like to keep', 'a !bopcount...'),
-        ('greeting', 'Please let me know', 'when a !bop happens~'),
+        ('greeting', 'I like to keep', 'a !bonkcount...'),
+        ('greeting', 'Please let me know', 'when a !bonk happens~'),
         ('github', 'Wait we have a', '!podcast now?'),
         ('unlurk', 'Check out the !mod', 'being played'),
         ('unlurk', 'We have !controller', 'display now!'),
-        ('github', 'What is that', '!truehit again?'),
-        #('greeting', 'Check out', '!morse'),
+        #('github', 'What is that', '!truehit again?'),
         ('notice', 'I can convert', 'the !temperature'),
         ]
 silent_place = -1

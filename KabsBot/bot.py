@@ -171,7 +171,7 @@ async def mod(ctx):
     if kabs_stream:
         is_command = True
 
-        #await ctx.send("Check out the Celeste Strawberry Jam Collab mod here: https:/gamebanana.com/mods/424541")
+        await ctx.send("Check out the Celeste Strawberry Jam Collab mod here: https://gamebanana.com/mods/424541")
         #await ctx.send("Try randomising your FE mod: https://github.com/lushen124/Universal-FE-Randomizer")
 
 @bot.command(name="controller")
@@ -214,23 +214,16 @@ async def podcast(ctx):
 #
 #         await ctx.send("Check out SpecialEffect and !donate if you can: https://www.specialeffect.org.uk TakeNRG")
 #
-#
-# @bot.command(name="donate")
-# async def donate(ctx):
-#     global is_command
-#     global kabs_stream
-#
-#     if kabs_stream:
-#         is_command = True
-#
-#         await ctx.send("Donate to SpecialEffect here! https://tiltify.com/@dnkabs/dnkabs-2023-charity-event")
 
-@bot.command(name="dabble")
-async def dabble(ctx):
+@bot.command(name="donate")
+async def donate(ctx):
     global is_command
-    is_command = True
+    global kabs_stream
 
-    await ctx.send("Dabble World is a free platformer maker game by dobbsworks: https://dobbsworks.github.io/Games/DabbleWorlds/")
+    if kabs_stream:
+        is_command = True
+
+        await ctx.send("Donate to support our friends: https://gofund.me/e901a1af")
 
 @bot.command(name="discord")
 async def discord(ctx):
@@ -238,41 +231,6 @@ async def discord(ctx):
     is_command = True
 
     await ctx.send("Grab a drink at the Kabs_Bot Café: https://discord.gg/actPVgqH3R")
-
-@bot.command(name="side")
-async def side(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("Get your tactics gaming here! https://www.twitch.tv/sidewinder437")
-
-@bot.command(name="justin")
-async def justin(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("Get your Fire Emblem gaming here! https://www.twitch.tv/justinjamesmdlc")
-
-@bot.command(name="atharia")
-async def atharia(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("Get your Mass Effect content here! https://www.youtube.com/@paragonseven")
-
-@bot.command(name="morse")
-async def morse(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("WhoIsDoopu made a game, check it out: https://oliverknight.itch.io/morse")
-
-@bot.command(name="duality")
-async def duality(ctx):
-    global is_command
-    is_command = True
-
-    await ctx.send("WhoIsDoopu voice acted in a game, check it out: https://store.steampowered.com/app/1938040/Royal_Duality/")
 
 @bot.command(name="temperature")
 async def temperature(ctx):
