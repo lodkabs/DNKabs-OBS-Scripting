@@ -19,7 +19,7 @@ coffee = False
 nowtime = "0"
 silent_time = 0
 silence_filler = [
-        #('greeting', 'Check out the !charity', 'we are supporting'),
+        #('greeting', 'Upcoming !charity', 'event!'),
         #('notice', 'If you are able to,', 'please !donate'),
         #('star', 'New !event,', 'this is exciting!'),
         ('greeting', 'I like getting', 'a !hug'),
@@ -33,9 +33,9 @@ silence_filler = [
         ('greeting', 'I like to keep', 'a !bonkcount...'),
         ('greeting', 'Please let me know', 'when a !bonk happens~'),
         ('github', 'Wait we have a', '!podcast now?'),
-        ('unlurk', 'Check out the !mod', 'being played'),
+        #('unlurk', 'Check out the !mod', 'being played'),
         ('unlurk', 'We have !controller', 'display now!'),
-        #('github', 'What is that', '!truehit again?'),
+        ('github', 'What is that', '!truehit again?'),
         ('notice', 'I can convert', 'the !temperature'),
         ]
 silent_place = -1

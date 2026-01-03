@@ -171,7 +171,7 @@ async def mod(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Check out the Celeste Strawberry Jam Collab mod here: https://gamebanana.com/mods/424541")
+        #await ctx.send("Check out the Celeste Strawberry Jam Collab mod here: https://gamebanana.com/mods/424541")
         #await ctx.send("Try randomising your FE mod: https://github.com/lushen124/Universal-FE-Randomizer")
 
 @bot.command(name="controller")
@@ -192,7 +192,7 @@ async def podcast(ctx):
     if kabs_stream:
         is_command = True
 
-        await ctx.send("Rathé and Kabs have started a podcast Indeterminate Reach! Find it on your favourite podcast app~")
+        await ctx.send("Rathé and Kabs have started a podcast Indeterminate Reach! Find it on your favourite podcast app. https://open.spotify.com/show/6gaqwdPufVrAIWmTNDMaS6?si=5d4a5d99cc8a4164")
 
 # @bot.command(name="rules")
 # async def rules(ctx):
@@ -212,18 +212,17 @@ async def podcast(ctx):
 #     if kabs_stream:
 #         is_command = True
 #
-#         await ctx.send("Check out SpecialEffect and !donate if you can: https://www.specialeffect.org.uk TakeNRG")
+#         await ctx.send("Charity stream supporting SpecialEffect UK taking place on 11th October 2025, starting at 2pm UK time! DinoDance")
 #
-
-@bot.command(name="donate")
-async def donate(ctx):
-    global is_command
-    global kabs_stream
-
-    if kabs_stream:
-        is_command = True
-
-        await ctx.send("Donate to support our friends: https://gofund.me/e901a1af")
+# @bot.command(name="donate")
+# async def donate(ctx):
+#     global is_command
+#     global kabs_stream
+#
+#     if kabs_stream:
+#         is_command = True
+#
+#         await ctx.send("https://tiltify.com/+dk-crew/dnkabs-specialeffect-2025")
 
 @bot.command(name="discord")
 async def discord(ctx):
@@ -353,6 +352,13 @@ async def github(ctx):
 
     await ctx.send("You can learn more about me here: https://github.com/lodkabs/DNKabs-OBS-Scripting Kappu")
 
+@bot.command(name="qq")
+async def qq(ctx):
+    global is_command
+
+    is_command = True
+
+    await ctx.send("Check out and wishlist Quantum Quartz: https://store.steampowered.com/app/3824680/Quantum_Quartz/")
 
 @bot.command(name="hug")
 async def hug(ctx):

@@ -88,7 +88,7 @@ bonk_responses = [
         "Why so serious, {STREAMER}? WhySoSerious",
         "You clearly haven't taken your training seriously {STREAMER}! RyuChamp",
         "Get back to basics {STREAMER}! FamilyMan",
-        "Alright {STREAMER}, let's avoid doing that again BONK",
+        "Alright {STREAMER}, let's avoid doing that again BOP",
         "You're almost there {STREAMER}, you just need some readjustment VoHiYo",
         "Thank you for being so considerate {STREAMER}, I actually do enjoy counting BegWan",
         "Is chat distracting you {STREAMER}? Stop causing problems everyone! PunOko",
